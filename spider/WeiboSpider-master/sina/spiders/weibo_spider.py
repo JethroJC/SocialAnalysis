@@ -17,6 +17,7 @@ class Spider(Spider):
     name = "SinaSpider"
     host = "https://weibo.cn"
     start_urls = list(set(weiboID))
+    #repeated = False
 
     def start_requests(self):
         for uid in self.start_urls:
@@ -98,11 +99,12 @@ class Spider(Spider):
         else:
             yield informationItem
         if int(num_tweets[0]) < 5000:
+        #    repeated = False
             yield Request(url="https://weibo.cn/%s/profile?filter=1&page=1" % ID, callback=self.parse_tweets, dont_filter=True)
-        if int(num_follows[0]) < 500:
-            yield Request(url="https://weibo.cn/%s/follow" % ID, callback=self.parse_relationship, dont_filter=True)
-        if int(num_fans[0]) < 500:
-            yield Request(url="https://weibo.cn/%s/fans" % ID, callback=self.parse_relationship, dont_filter=True)
+        #if int(num_follows[0]) < 500:
+        #    yield Request(url="https://weibo.cn/%s/follow" % ID, callback=self.parse_relationship, dont_filter=True)
+        #if int(num_fans[0]) < 500:
+        #    yield Request(url="https://weibo.cn/%s/fans" % ID, callback=self.parse_relationship, dont_filter=True)
 
     def parse_tweets(self, response):
         """ 抓取微博数据 """
@@ -144,6 +146,7 @@ class Spider(Spider):
                 self.logger.info(e)
                 pass
 
+        #if not repeated:
         url_next = selector.xpath('body/div[@class="pa" and @id="pagelist"]/form/div/a[text()="下页"]/@href').extract()
         if url_next:
             yield Request(url=self.host + url_next[0], callback=self.parse_tweets, dont_filter=True)

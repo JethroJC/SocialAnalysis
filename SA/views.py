@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 
 def index(request):
-    return render(request,'SA/index.html',{})
+    return render(request, 'SA/index.html', {})
 
 @csrf_exempt
 def register(request):

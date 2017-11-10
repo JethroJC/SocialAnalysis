@@ -68,3 +68,67 @@ def user_register(request):
 @csrf_exempt
 def home(request):
     return render(request,'SA/home.html',{})
+
+@csrf_exempt
+def person_info(request):
+    return render(request,'SA/person_info.html',{})
+
+@csrf_exempt
+def person_weibo(request):
+    return render(request,'SA/person_weibo.html',{})
+
+@csrf_exempt
+def person_tieba(request):
+    return render(request,'SA/person_tieba.html',{})
+
+@csrf_exempt
+def person_zhihu(request):
+    return render(request,'SA/person_zhihu.html',{})
+
+@csrf_exempt
+def state_weibo(request):
+    return render(request,'SA/state_weibo.html',{})
+
+@csrf_exempt
+def state_tieba(request):
+    return render(request,'SA/state_tieba.html',{})
+
+@csrf_exempt
+def state_zhihu(request):
+    return render(request,'SA/state_zhihu.html',{})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

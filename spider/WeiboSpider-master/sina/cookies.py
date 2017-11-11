@@ -18,7 +18,7 @@ from selenium.webdriver.support import expected_conditions as EC
 或者你也可以把时间间隔调大点。
 """
 WeiBoAccounts = [
-{'username': '18845895325', 'password': '159365582085'},
+{'username': '***', 'password': '***'},
 ]
 
 cookies = []

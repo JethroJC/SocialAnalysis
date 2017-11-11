@@ -31,7 +31,9 @@ class MongoDBPipeline(object):
                 pass
         elif isinstance(item, InformationItem):
             try:
+                data = dict(item)
                 self.Information.insert(dict(item))
+                self.Information.find({"_id": data()})
             except Exception:
                 pass
         return item

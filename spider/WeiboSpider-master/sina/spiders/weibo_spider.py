@@ -28,8 +28,11 @@ class Spider(Spider):
         informationItem = InformationItem()
         selector = Selector(response)
         ID = re.findall('(\d+)/info', response.url)[0]
+        #avator = re.findall('<div class="c">.*"(.*?)" alt="头像">', response.text)
+
         try:
             text1 = ";".join(selector.xpath('body/div[@class="c"]//text()').extract())  # 获取标签里的所有text()
+            avator = selector.xpath('body/div/img[@alt="头像"]/@src').extract()
             nickname = re.findall('昵称[：:]?(.*?);', text1)
             gender = re.findall('性别[：:]?(.*?);', text1)
             place = re.findall('地区[：:]?(.*?);', text1)
@@ -42,6 +45,8 @@ class Spider(Spider):
             url = re.findall('互联网[：:]?(.*?);', text1)
 
             informationItem["_id"] = ID
+            if avator and avator[0]:
+                informationItem["Avator"] = avator[0].replace(u"\xa0", "")
             if nickname and nickname[0]:
                 informationItem["NickName"] = nickname[0].replace(u"\xa0", "")
             if gender and gender[0]:
@@ -73,6 +78,7 @@ class Spider(Spider):
             if url:
                 informationItem["URL"] = url[0]
 
+            num = 5000
             try:
                 urlothers = "https://weibo.cn/attgroup/opening?uid=%s" % ID
                 new_ck = {}
@@ -84,6 +90,7 @@ class Spider(Spider):
                     texts = ";".join(selector.xpath('//body//div[@class="tip2"]/a//text()'))
                     if texts:
                         num_tweets = re.findall('微博\[(\d+)\]', texts)
+                        num = int(num_tweets[0])
                         num_follows = re.findall('关注\[(\d+)\]', texts)
                         num_fans = re.findall('粉丝\[(\d+)\]', texts)
                         if num_tweets:
@@ -98,9 +105,9 @@ class Spider(Spider):
             pass
         else:
             yield informationItem
-        if int(num_tweets[0]) < 5000:
+        #if num < 5000:
         #    repeated = False
-            yield Request(url="https://weibo.cn/%s/profile?filter=1&page=1" % ID, callback=self.parse_tweets, dont_filter=True)
+        yield Request(url="https://weibo.cn/%s/profile?filter=1&page=1" % ID, callback=self.parse_tweets, dont_filter=True)
         #if int(num_follows[0]) < 500:
         #    yield Request(url="https://weibo.cn/%s/follow" % ID, callback=self.parse_relationship, dont_filter=True)
         #if int(num_fans[0]) < 500:

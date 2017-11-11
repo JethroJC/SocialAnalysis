@@ -24,6 +24,7 @@ class InformationItem(Item):
     VIPlevel = Field()  # 会员等级
     Authentication = Field()  # 认证
     URL = Field()  # 首页链接
+    Avator = Field() #头像地址
 
 
 class TweetsItem(Item):

@@ -9,3 +9,6 @@ class UserInfo(models.Model):
     image = models.ImageField(blank=True, upload_to=BASE_DIR+'/media/head')
     choice_index = (('F', '女'), ('M', '男'))
     sex = models.CharField(max_length=10, default="M", choices=choice_index)
+
+    def __str__(self):
+        return  self.user.username

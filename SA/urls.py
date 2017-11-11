@@ -9,7 +9,9 @@ person_pattern = [
 ]
 
 state_pattern = [
-
+    url(r'^$',state_weibo,name='state_weibo'),
+    url(r'^state_tieba/$',state_tieba,name='state_tieba'),
+    url(r'^state_zhihu/$',state_zhihu,name='state_zhihu'),
 ]
 
 analysis_pattern = [

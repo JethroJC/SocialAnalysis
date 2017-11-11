@@ -71,7 +71,27 @@ def home(request):
 
 @csrf_exempt
 def person_info(request):
-    return render(request,'SA/person_info.html',{})
+    user = request.user
+    userinfo = user.userinfo
+
+    context = {}
+    context['name'] = user.username
+    context['email'] = user.email
+
+    if userinfo.sex == 'F':
+        context['sex'] = '女'
+    else:
+        context['sex'] = '男'
+
+    img_path =  userinfo.image.name
+
+    if img_path != '':
+            index = img_path.find('/media')
+            img_path = img_path[index:]
+
+    context['img_path'] = img_path
+
+    return render(request,'SA/person_info.html',context)
 
 @csrf_exempt
 def person_weibo(request):

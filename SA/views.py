@@ -109,11 +109,21 @@ def add_weibo(request):
         flag,img,location,profile = get_weibo_profile(username,homepage_url)
 
         if flag == 0:
-            pass
+            result = {'status': 'success'}
+            return HttpResponse(json.dumps(result), content_type='application/json')
         else:
-            pass
+            result = {'status': 'error'}
+            return HttpResponse(json.dumps(result), content_type='application/json')
     else:
         return render_to_response('404.html')
+
+@csrf_exempt
+def add_tieba(request):
+    pass
+
+@csrf_exempt
+def add_zhihu(request):
+    pass
 
 @csrf_exempt
 def person_tieba(request):

@@ -6,6 +6,9 @@ person_pattern = [
     url(r'^person_weibo/$',person_weibo,name='person_weibo'),
     url(r'^person_tieba/$',person_tieba,name='person_tieba'),
     url(r'^person_zhihu/$',person_zhihu,name='person_zhihu'),
+    url(r'^add_weibo/$',add_weibo,name='add_weibo'),
+    url(r'^add_tieba/$',add_tieba,name='add_tieba'),
+    url(r'^add_zhihu/$',add_zhihu,name='add_zhihu'),
 ]
 
 state_pattern = [

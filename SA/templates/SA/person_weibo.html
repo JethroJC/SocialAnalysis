@@ -66,41 +66,35 @@
 		</div>
 	</div>
 
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $('#add').on('click',function(){
+            let weibo_info = $('#add_form').serialize();
+            $.ajax({
+                    url: "{% url 'SA:add_weibo' %}",
+                    type: "post",
+                    datatype: "json",
+                    data: weibo_info,
+                    async: false,
+                    success: function(ret) {
+                        if(ret.status === "success"){
+                            alert("添加成功");
+                            window.location.href = '{% url 'SA:person_weibo' %}';
+                            window.event.returnValue = false;
+                            //window.location = 'http://127.0.0.1:8000/SA/home';
+                            //Response.Redirect("http://127.0.0.1:8000/SA/home",true);
+                        }
+                        else
+                        {
+                            $('#login_form').find('input').each(function () {$(this).val("");});
+                            alert("用户名或主页地址输入错误");
+                        }
+                    }
+            });
+
+        });
+    });
+    </script>
+
 {% endblock %}
 
-<script type="text/javascript">
-  $(document).ready(function(){
-    $('#add').on('click',function(){
-        let weibo_info = $('#add_form').serialize();
-        $.ajax({
-                url: "{% url 'SA:add_weibo' %}",
-                type: "post",
-                datatype: "json",
-                data: weibo_info,
-                async: false,
-                success: function(ret) {
-                    if(ret.status === "success"){
-                        alert("登陆成功");
-                        window.location.href = '{% url 'SA:home' %}';
-                        window.event.returnValue = false;
-                        //window.location = 'http://127.0.0.1:8000/SA/home';
-                        //Response.Redirect("http://127.0.0.1:8000/SA/home",true);
-                    }
-                    else if(ret.error_message === "user_not_exist")
-                    {
-                        $('#login_form').find('input').each(function () {$(this).val("");});
-                        //$('#info_feedback_modal').modal('show').find('h1').eq(0).text("用户不存在");
-                        alert("用户不存在");
-                    }
-                    else
-                    {
-                        $('#login_form').find('input').each(function () {$(this).val("");});
-                        //$('#info_feedback_modal').modal('show').find('h1').eq(0).text("密码不正确");
-                        alert("密码不正确");
-                    }
-                    }
-        });
-
-    });
-});
-</script>

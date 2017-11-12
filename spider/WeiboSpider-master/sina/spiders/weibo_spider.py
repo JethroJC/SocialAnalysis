@@ -154,9 +154,9 @@ class Spider(Spider):
                 pass
 
         #if not repeated:
-        url_next = selector.xpath('body/div[@class="pa" and @id="pagelist"]/form/div/a[text()="下页"]/@href').extract()
-        if url_next:
-            yield Request(url=self.host + url_next[0], callback=self.parse_tweets, dont_filter=True)
+        #url_next = selector.xpath('body/div[@class="pa" and @id="pagelist"]/form/div/a[text()="下页"]/@href').extract()
+        #if url_next:
+        #    yield Request(url=self.host + url_next[0], callback=self.parse_tweets, dont_filter=True)
 
     def parse_relationship(self, response):
         """ 打开url爬取里面的个人ID """

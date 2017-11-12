@@ -26,8 +26,12 @@ class MongoDBPipeline(object):
                 pass
         elif isinstance(item, TweetsItem):
             try:
-                self.Tweets.insert(dict(item))
-            except Exception:
+                data = dict(item)
+                if self.Tweets.find({'_id': data['_id']}).count() > 0:
+                    self.Tweets.update({'_id': data['_id']}, {'$set': data})
+                else:
+                    self.Tweets.insert(dict(item))
+            except Exception as e:
                 pass
         elif isinstance(item, InformationItem):
             try:

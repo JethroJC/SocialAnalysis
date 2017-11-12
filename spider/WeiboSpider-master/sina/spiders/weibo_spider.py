@@ -4,6 +4,7 @@
 import datetime
 import requests
 import re
+import time
 from lxml import etree
 from scrapy import Spider
 from scrapy.selector import Selector
@@ -145,7 +146,16 @@ class Spider(Spider):
                     tweetsItems["Comment"] = int(comment[0])
                 if others:
                     others = others[0].split('来自')
-                    tweetsItems["PubTime"] = others[0].replace(u"\xa0", "")
+                    date = others[0].replace(u"\xa0", "")
+                    if re.match('\d\d月\d\d日 \d\d:\d\d',date):
+                        date = date.replace('月', '-')
+                        date = date.replace('日', '')
+                        tweetsItems["PubTime"] = str(time.localtime(time.time())[0]) + '-' + date
+                    elif re.match('\d\d\d\d-\d\d-\d\d \d\d:\d\d',date):
+                        tweetsItems["PubTime"] = re.match('\d\d\d\d-\d\d-\d\d \d\d:\d\d',date).group()
+                    elif re.match('今天 \d\d:\d\d',date):
+                        now = time.localtime(time.time())
+                        tweetsItems["PubTime"] = str(now[0]) + '-' + str(now[1]) + '-' + str(now[2]) + ' ' + re.findall('今天 (\d\d:\d\d)',date)[0]
                     if len(others) == 2:
                         tweetsItems["Tools"] = others[1].replace(u"\xa0", "")
                 yield tweetsItems

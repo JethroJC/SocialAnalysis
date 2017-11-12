@@ -3,10 +3,12 @@ from .models import UserInfo
 from django.contrib.auth.models import User
 import json
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, render_to_response, \
     HttpResponse, HttpResponseRedirect
+from .spider import *
 
 @csrf_exempt
 def index(request):
@@ -70,6 +72,7 @@ def home(request):
     return render(request,'SA/home.html',{})
 
 @csrf_exempt
+@login_required
 def person_info(request):
     user = request.user
     userinfo = user.userinfo
@@ -96,6 +99,31 @@ def person_info(request):
 @csrf_exempt
 def person_weibo(request):
     return render(request,'SA/person_weibo.html',{})
+
+@csrf_exempt
+def add_weibo(request):
+    if request.method == 'POST':
+        info = request.POST
+        username = info['username']
+        homepage_url = info['homepage_url']
+        flag,img,location,profile = get_weibo_profile(username,homepage_url)
+
+        if flag == 0:
+            result = {'status': 'success'}
+            return HttpResponse(json.dumps(result), content_type='application/json')
+        else:
+            result = {'status': 'error'}
+            return HttpResponse(json.dumps(result), content_type='application/json')
+    else:
+        return render_to_response('404.html')
+
+@csrf_exempt
+def add_tieba(request):
+    pass
+
+@csrf_exempt
+def add_zhihu(request):
+    pass
 
 @csrf_exempt
 def person_tieba(request):

@@ -9,7 +9,11 @@ class UserInfoInline(admin.StackedInline):
 
 
 class MyUserAdmin(UserAdmin):
-    list_display = ('username', 'email', 'password')
+    fieldsets = (
+        (None, {
+            'fields': ('username', 'password', 'email')
+        }),
+    )
     inlines = (UserInfoInline,)
 
 

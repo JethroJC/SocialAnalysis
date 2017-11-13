@@ -4,12 +4,12 @@ def get_weibo_profile(username,homepage_url):
 
     flag : 0 表示成功获取到用户基本信息
            1 表示该用户不存在 或 url不存在
-    img : 用户头像
+    img_url : 用户头像
     lcoation : 用户位置
     profile : 用户简介
     '''
-    flag = img = location = profile = ''
-    return flag,img,location,profile
+    flag = img_url = location = profile = ''
+    return flag,img_url,location,profile
 
 def get_weibo_state(username):
     '''

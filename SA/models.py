@@ -3,11 +3,9 @@ from django.contrib.auth.models import User
 import os
 
 class Weibo(models.Model):
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
     username = models.CharField(max_length=100)
     homepage_url = models.CharField(max_length=200)
-    image = models.ImageField(blank=True, upload_to=BASE_DIR+'/media/head')
+    image_url = models.CharField(max_length=200)
     location = models.CharField(max_length=100,blank=True,null=True)
     profile = models.CharField(max_length=200,blank=True,null=True)
 
@@ -24,4 +22,4 @@ class UserInfo(models.Model):
     weibo_friend = models.ManyToManyField(Weibo)
 
     def __str__(self):
-        return  self.user.username
+        return self.user.username

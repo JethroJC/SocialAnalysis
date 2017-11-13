@@ -12,6 +12,23 @@ class Weibo(models.Model):
     def __str__(self):
         return self.username
 
+class Tieba(models.Model):
+    username = models.CharField(max_length=100)
+    homepage_url = models.CharField(max_length=200)
+    image_url = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.username
+
+class Zhihu(models):
+    username = models.CharField(max_length=100)
+    homepage_url = models.CharField(max_length=200)
+    img_url = models.CharField(max_length=200)
+    profile = models.CharField(max_length=200,blank=True,null=True)
+
+    def __str__(self):
+        return self.username
+
 class UserInfo(models.Model):
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -20,6 +37,8 @@ class UserInfo(models.Model):
     choice_index = (('F', '女'), ('M', '男'))
     sex = models.CharField(max_length=10, default="M", choices=choice_index)
     weibo_friend = models.ManyToManyField(Weibo)
+    tieba_friend = models.ManyToManyField(Tieba)
+    zhihu_friend = models.ManyToManyField(Zhihu)
 
     def __str__(self):
         return self.user.username

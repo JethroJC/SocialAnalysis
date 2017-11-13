@@ -34,9 +34,10 @@ def get_weibo_state(weibo_id):
     Tweets = db['Tweets']
     item = Tweets.find({'ID': weibo_id})
     if item:
-        return  [dict(x) for x in item]#dict(item[0])
+        return  [dict(x) for x in item]
     else:
         return []
+
 
 if __name__ == "__main__":
     try:

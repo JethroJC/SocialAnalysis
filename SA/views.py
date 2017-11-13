@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import UserInfo
+from .models import *
 from django.contrib.auth.models import User
 import json
 from django.views.decorators.csrf import csrf_exempt
@@ -68,6 +68,7 @@ def user_register(request):
         return render_to_response('404.html')
 
 @csrf_exempt
+@login_required
 def home(request):
     return render(request,'SA/home.html',{})
 
@@ -97,54 +98,110 @@ def person_info(request):
     return render(request,'SA/person_info.html',context)
 
 @csrf_exempt
+@login_required
 def person_weibo(request):
-    return render(request,'SA/person_weibo.html',{})
+    user = request.user
+    userinfo = user.userinfo
+    weibo_friends = userinfo.weibo_friend.all()
+    friends = []
+    context = {}
+
+    for f in weibo_friends:
+        document = get_weibo_profile(f.weibo_id)
+        friend = {}
+        friend['name'] = document['NickName']
+        friend['img_src'] = document['Avator']
+        friend['province'] = document['Province']
+        friend['city'] = document['City']
+        friend['url'] = document['URL']
+
+        friends.append(friend)
+
+    context['friends'] = friends
+    return render(request,'SA/person_weibo.html',context)
 
 @csrf_exempt
+@login_required
 def add_weibo(request):
     if request.method == 'POST':
         info = request.POST
         username = info['username']
         homepage_url = info['homepage_url']
-        flag,img,location,profile = get_weibo_profile(username,homepage_url)
+        weibo_id = info['weibo_id']
+        document = get_weibo_profile(weibo_id)
 
-        if flag == 0:
+        '''
+        if document == {}:
+            Weibo(username=username,homepage_url=homepage_url,weibo_id=weibo_id).save()
             result = {'status': 'success'}
             return HttpResponse(json.dumps(result), content_type='application/json')
         else:
             result = {'status': 'error'}
             return HttpResponse(json.dumps(result), content_type='application/json')
+        '''
     else:
         return render_to_response('404.html')
 
 @csrf_exempt
+@login_required
 def add_tieba(request):
     pass
 
 @csrf_exempt
+@login_required
 def add_zhihu(request):
     pass
 
 @csrf_exempt
+@login_required
 def person_tieba(request):
     return render(request,'SA/person_tieba.html',{})
 
 @csrf_exempt
+@login_required
 def person_zhihu(request):
     return render(request,'SA/person_zhihu.html',{})
 
 @csrf_exempt
+@login_required
 def state_weibo(request):
+    user = request.user
+    userinfo = user.userinfo
+    weibo_friends = userinfo.weibo_friend.all()
+    friends = []
+
+    for f in weibo_friends:
+        states = get_weibo_state(f.weibo_id)
+        friend_info = get_weibo_profile(f.weibo_id)
+
+        friend = {}
+        friend['info'] = friend_info
+        friend['time'] = []
+        friend['content'] = []
+        friend['like'] = []
+        friend['comment_num'] = []
+
+        for state in states:
+            friend['time'].append(state['PubTime'])
+            friend['content'].append(state['Content'])
+            friend['like'].append(state['Like'])
+            friend['comment_num'].append(state['Comment'])
+
+        friends.append(friend)
+
+    print(friends)
+
     return render(request,'SA/state_weibo.html',{})
 
 @csrf_exempt
+@login_required
 def state_tieba(request):
     return render(request,'SA/state_tieba.html',{})
 
 @csrf_exempt
+@login_required
 def state_zhihu(request):
     return render(request,'SA/state_zhihu.html',{})
-
 
 
 

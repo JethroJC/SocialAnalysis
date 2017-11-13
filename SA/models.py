@@ -5,9 +5,9 @@ import os
 class Weibo(models.Model):
     username = models.CharField(max_length=100)
     homepage_url = models.CharField(max_length=200)
-    image_url = models.CharField(max_length=200)
-    location = models.CharField(max_length=100,blank=True,null=True)
-    profile = models.CharField(max_length=200,blank=True,null=True)
+    image_url = models.CharField(max_length=200,default=" ")
+    location = models.CharField(max_length=100,default=" ")
+    profile = models.CharField(max_length=200,default=" ")
 
     def __str__(self):
         return self.username
@@ -15,16 +15,16 @@ class Weibo(models.Model):
 class Tieba(models.Model):
     username = models.CharField(max_length=100)
     homepage_url = models.CharField(max_length=200)
-    image_url = models.CharField(max_length=200)
+    image_url = models.CharField(max_length=200,default=" ")
 
     def __str__(self):
         return self.username
 
-class Zhihu(models):
+class Zhihu(models.Model):
     username = models.CharField(max_length=100)
     homepage_url = models.CharField(max_length=200)
-    img_url = models.CharField(max_length=200)
-    profile = models.CharField(max_length=200,blank=True,null=True)
+    img_url = models.CharField(max_length=200,default=" ")
+    profile = models.CharField(max_length=200,default=" ")
 
     def __str__(self):
         return self.username

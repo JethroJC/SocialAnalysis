@@ -5,7 +5,6 @@ from .models import *
 
 class UserInfoInline(admin.StackedInline):
     model = UserInfo
-    filter_horizontal = ('weibo_friend','tieba_friend','zhihu_friend')
     extra = 1
 
 
@@ -17,10 +16,10 @@ class MyUserAdmin(UserAdmin):
     )
     inlines = (UserInfoInline,)
 
-class WeiboAdmin(admin.ModelAdmin):
+class FollowAdmin(admin.ModelAdmin):
     pass
 
 admin.site.unregister(User)
 admin.site.register(User,MyUserAdmin)
-admin.site.register(Weibo,WeiboAdmin)
+admin.site.register(Follow,FollowAdmin)
 

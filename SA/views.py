@@ -95,30 +95,38 @@ def person_info(request):
 
     context['img_path'] = img_path
 
+    follows = userinfo.follow_set.all()
+
+    context['follows'] = follows
+
     return render(request,'SA/person_info.html',context)
 
 @csrf_exempt
 @login_required
-def person_weibo(request):
+def person_detail(request,follow_id):
     user = request.user
     userinfo = user.userinfo
-    weibo_friends = userinfo.weibo_friend.all()
-    friends = []
+    friend = Follow.objects.get(id=follow_id)
+
     context = {}
 
-    for f in weibo_friends:
-        document = get_weibo_profile(f.weibo_id)
-        friend = {}
-        friend['name'] = document['NickName']
-        friend['img_src'] = document['Avator']
-        friend['province'] = document['Province']
-        friend['city'] = document['City']
-        friend['url'] = document['URL']
+    follows = userinfo.follow_set.all()
+    context['follows'] = follows
+    context['follow_id'] = follow_id
 
-        friends.append(friend)
+    document = get_weibo_profile(friend.weibo_id)
+    context['weibo_name'] = document['NickName']
+    context['weibo_img_src'] = document['Avator']
+    context['weibo_province'] = document['Province']
+    context['weibo_city'] = document['City']
+    context['weibo_url'] = document['URL']
 
-    context['friends'] = friends
-    return render(request,'SA/person_weibo.html',context)
+    context['zhihu_name'] = friend.zhihu_username
+    context['friend'] = friend
+
+    context['tieba_name'] = friend.tieba_username
+
+    return render(request,'SA/person_detail.html',context)
 
 @csrf_exempt
 @login_required
@@ -151,16 +159,6 @@ def add_tieba(request):
 @login_required
 def add_zhihu(request):
     pass
-
-@csrf_exempt
-@login_required
-def person_tieba(request):
-    return render(request,'SA/person_tieba.html',{})
-
-@csrf_exempt
-@login_required
-def person_zhihu(request):
-    return render(request,'SA/person_zhihu.html',{})
 
 @csrf_exempt
 @login_required
@@ -202,6 +200,38 @@ def state_tieba(request):
 @login_required
 def state_zhihu(request):
     return render(request,'SA/state_zhihu.html',{})
+
+@csrf_exempt
+@login_required
+def state(request):
+    user = request.user
+    userinfo = user.userinfo
+    weibo_friends = userinfo.weibo_friend.all()
+    friends = []
+
+    for f in weibo_friends:
+        states = get_weibo_state(f.weibo_id)
+        friend_info = get_weibo_profile(f.weibo_id)
+
+        friend = {}
+        friend['info'] = friend_info
+        friend['time'] = []
+        friend['content'] = []
+        friend['like'] = []
+        friend['comment_num'] = []
+
+        for state in states:
+            friend['time'].append(state['PubTime'])
+            friend['content'].append(state['Content'])
+            friend['like'].append(state['Like'])
+            friend['comment_num'].append(state['Comment'])
+
+        friends.append(friend)
+
+    print(friends)
+
+    return render(request,'SA/state_weibo.html',{})
+
 
 
 

@@ -2,38 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 import os
 
-
-class Weibo(models.Model):
-    username = models.CharField(max_length=100)
-    homepage_url = models.CharField(max_length=200)
-    weibo_id = models.CharField(max_length=20,default="")
-
-    '''
-    image_url = models.CharField(max_length=200,default=" ")
-    location = models.CharField(max_length=100,default=" ")
-    profile = models.CharField(max_length=200,default=" ")
-    '''
-
-    def __str__(self):
-        return self.username
-
-class Tieba(models.Model):
-    username = models.CharField(max_length=100)
-    homepage_url = models.CharField(max_length=200)
-    image_url = models.CharField(max_length=200,default=" ")
-
-    def __str__(self):
-        return self.username
-
-class Zhihu(models.Model):
-    username = models.CharField(max_length=100)
-    homepage_url = models.CharField(max_length=200)
-    img_url = models.CharField(max_length=200,default=" ")
-    profile = models.CharField(max_length=200,default=" ")
-
-    def __str__(self):
-        return self.username
-
 class UserInfo(models.Model):
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -41,9 +9,21 @@ class UserInfo(models.Model):
     image = models.ImageField(blank=True, upload_to=BASE_DIR+'/media/head')
     choice_index = (('F', '女'), ('M', '男'))
     sex = models.CharField(max_length=10, default="M", choices=choice_index)
-    weibo_friend = models.ManyToManyField(Weibo,blank=True)
-    tieba_friend = models.ManyToManyField(Tieba,blank=True)
-    zhihu_friend = models.ManyToManyField(Zhihu,blank=True)
 
     def __str__(self):
         return self.user.username
+
+class Follow(models.Model):
+    tag_name = models.CharField(max_length=100,default=" ",blank=True)
+    weibo_username = models.CharField(max_length=100,default=" ",blank=True)
+    weibo_url = models.CharField(max_length=200,default=" ",blank=True)
+    weibo_id = models.CharField(max_length=20,default=" ",blank=True)
+    tieba_username = models.CharField(max_length=100,default=" ",blank=True)
+    tieba_url = models.CharField(max_length=200,default=" ",blank=True)
+    zhihu_username = models.CharField(max_length=100,default=" ",blank=True)
+    zhihu_url = models.CharField(max_length=200,default=" ",blank=True)
+
+    follow_by = models.ForeignKey(UserInfo)
+
+    def __str__(self):
+        return self.tag_name

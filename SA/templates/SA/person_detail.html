@@ -1,0 +1,475 @@
+{% extends 'SA/person_base.html' %}
+
+{% block list %}
+    <a href="{% url 'SA:person_info' %}" class="list-group-item active"><h4>基本信息</h4></a>
+    <br>
+    <a href="{% url 'SA:person_info' %}" class="list-group-item active"><h4>关注列表</h4></a>
+    {% for f in follows %}
+    <div class="list-group-item">
+        <a href='{% url 'SA:person_detail' f.id %}'><h4>{{ f.tag_name }}</h4></a>
+    </div>
+    {% endfor %}
+{% endblock %}
+
+{% block content %}
+    <div class="row clearfix">
+        <h2 class="text-center text-info">
+            {{ friend.tag_name }}
+        </h2>
+		<div class="col-md-12 column">
+			<div class="tabbable" id="tabs-995837">
+				<ul class="nav nav-tabs">
+					<li class="active">
+						 <a href="#panel-1" data-toggle="tab">微博</a>
+					</li>
+					<li>
+						 <a href="#panel-2" data-toggle="tab">知乎</a>
+					</li>
+                    <li>
+						 <a href="#panel-3" data-toggle="tab">贴吧</a>
+					</li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane active" id="panel-1">
+                        <div class="row clearfix">
+                            {% if weibo_name != "" %}
+                                <table class="table table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <h3>
+                                                    用户头像
+                                                </h3>
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                <img onerror="this.src='/media/head/default.jpg'" src="{{ weibo_img_src }}"height="60" width="60"  class="img-circle" />
+                                            </td>
+                                        </tr>
+                                        <tr >
+                                            <td>
+                                                <h3>
+                                                    用户名
+                                                </h3>
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+                                                <br>
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+                                                <font size="5">
+                                                {{ weibo_name }}
+                                                </font>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h3>
+                                                    地址
+                                                </h3>
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+                                                <br>
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                <font size="5">
+                                                {{ weibo_province }} {{ weibo_city }}
+                                                </font>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                <br>
+                                <h2 class="text-center text-info">
+                                    尚未添加微博关注
+                                </h2>
+                                <form class="form-horizontal" role="form" id="add_weibo_form" method="post">
+                                       {% csrf_token %}
+                                        <div class="form-group">
+                                             <label for="inputEmail3" class="col-sm-2 control-label">账号</label>
+                                            <div class="col-sm-10">
+                                                <input  class="form-control" id="username" name="username" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                             <label for="inputPassword3" class="col-sm-2 control-label">主页地址</label>
+                                            <div class="col-sm-10">
+                                                <input  class="form-control" id="homepage_url" name="homepage_url"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                             <label for="inputPassword3" class="col-sm-2 control-label">用户id</label>
+                                            <div class="col-sm-10">
+                                                <input  class="form-control" id="weibo_id" name="weibo_id"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-offset-2 col-sm-10">
+                                                 <button type="submit" class="btn btn-default" id="add_weibo">添加</button>
+                                            </div>
+                                        </div>
+                                </form>
+                            {% endif %}
+
+                        </div>
+                            <br>
+                    </div>
+
+                    <div class="tab-pane" id="panel-2">
+                        <div class="row clearfix">
+                            {% if zhihu_name != "" %}
+                                <table class="table table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <h3>
+                                                    用户头像
+                                                </h3>
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                <img onerror="this.src='/media/head/default.jpg'" src="{{ weibo_img_src }}"height="60" width="60"  class="img-circle" />
+                                            </td>
+                                        </tr>
+                                        <tr >
+                                            <td>
+                                                <h3>
+                                                    用户名
+                                                </h3>
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+                                                <br>
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+                                                <font size="5">
+                                                {{ weibo_name }}
+                                                </font>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h3>
+                                                    地址
+                                                </h3>
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+                                                <br>
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                <font size="5">
+                                                {{ weibo_province }} {{ weibo_city }}
+                                                </font>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                <br>
+                                <h2 class="text-center text-info">
+                                    尚未添加知乎关注
+                                </h2>
+                                <form class="form-horizontal" role="form" id="add_zhihu_form" method="post">
+                                       {% csrf_token %}
+                                        <div class="form-group">
+                                             <label for="inputEmail3" class="col-sm-2 control-label">账号</label>
+                                            <div class="col-sm-10">
+                                                <input  class="form-control" id="username" name="username" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                             <label for="inputPassword3" class="col-sm-2 control-label">主页地址</label>
+                                            <div class="col-sm-10">
+                                                <input  class="form-control" id="homepage_url" name="homepage_url"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                             <label for="inputPassword3" class="col-sm-2 control-label">用户id</label>
+                                            <div class="col-sm-10">
+                                                <input  class="form-control" id="weibo_id" name="weibo_id"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-offset-2 col-sm-10">
+                                                 <button type="submit" class="btn btn-default" id="add_zhihu">添加</button>
+                                            </div>
+                                        </div>
+                                </form>
+                            {% endif %}
+                        </div>
+                            <br>
+                    </div>
+
+					<div class="tab-pane" id="panel-3">
+                        <div class="row clearfix">
+                            {% if tieba_name != "" %}
+                                <table class="table table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <h3>
+                                                    用户头像
+                                                </h3>
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                <img onerror="this.src='/media/head/default.jpg'" src="{{ weibo_img_src }}"height="60" width="60"  class="img-circle" />
+                                            </td>
+                                        </tr>
+                                        <tr >
+                                            <td>
+                                                <h3>
+                                                    用户名
+                                                </h3>
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+                                                <br>
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+                                                <font size="5">
+                                                {{ weibo_name }}
+                                                </font>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h3>
+                                                    地址
+                                                </h3>
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+                                                <br>
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                <font size="5">
+                                                {{ weibo_province }} {{ weibo_city }}
+                                                </font>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                <br>
+                                <h2 class="text-center text-info">
+                                    尚未添加贴吧关注
+                                </h2>
+                                <form class="form-horizontal" role="form" id="add_tieba_form" method="post">
+                                       {% csrf_token %}
+                                        <div class="form-group">
+                                             <label for="inputEmail3" class="col-sm-2 control-label">账号</label>
+                                            <div class="col-sm-10">
+                                                <input  class="form-control" id="username" name="username" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                             <label for="inputPassword3" class="col-sm-2 control-label">主页地址</label>
+                                            <div class="col-sm-10">
+                                                <input  class="form-control" id="homepage_url" name="homepage_url"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                             <label for="inputPassword3" class="col-sm-2 control-label">用户id</label>
+                                            <div class="col-sm-10">
+                                                <input  class="form-control" id="weibo_id" name="weibo_id"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-offset-2 col-sm-10">
+                                                 <button type="submit" class="btn btn-default" id="add_tieba">添加</button>
+                                            </div>
+                                        </div>
+                                </form>
+                            {% endif %}
+                        </div>
+                            <br>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $('#add').on('click',function(){
+            let weibo_info = $('#add_form').serialize();
+            $.ajax({
+                    url: "{% url 'SA:add_weibo' %}",
+                    type: "post",
+                    datatype: "json",
+                    data: weibo_info,
+                    async: false,
+                    success: function(ret) {
+                        if(ret.status === "success"){
+                            alert("添加成功");
+                            window.location.href = '{% url 'SA:person_detail' follow_id  %}';
+                            window.event.returnValue = false;
+                            //window.location = 'http://127.0.0.1:8000/SA/home';
+                            //Response.Redirect("http://127.0.0.1:8000/SA/home",true);
+                        }
+                        else
+                        {
+                            $('#login_form').find('input').each(function () {$(this).val("");});
+                            alert("用户名或主页地址输入错误");
+                        }
+                    }
+            });
+
+        });
+    });
+    </script>
+
+{% endblock %}
+

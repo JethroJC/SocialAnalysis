@@ -11,8 +11,7 @@ person_pattern = [
 
 state_pattern = [
     url(r'^$',state,name='state'),
-    url(r'^state_tieba/$',state_tieba,name='state_tieba'),
-    url(r'^state_zhihu/$',state_zhihu,name='state_zhihu'),
+    url(r'^(?P<follow_id>[0-9]+)/$',state_detail,name='state_detail'),
 ]
 
 analysis_pattern = [

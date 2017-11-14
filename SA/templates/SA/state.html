@@ -27,23 +27,8 @@
 						<li>
 							 <a href="{% url 'SA:person_info' %}">个人</a>
 						</li>
-                        <li class="dropdown active">
-							 <a href="{% url 'SA:state_weibo' %}" class="dropdown-toggle" data-toggle="dropdown">动态<strong class="caret"></strong></a>
-							<ul class="dropdown-menu">
-								<li>
-									 <a href="{% url 'SA:state_weibo' %}">微博</a>
-								</li>
-								<li class="divider">
-								</li>
-								<li>
-									 <a href="{% url 'SA:state_tieba' %}">贴吧</a>
-								</li>
-                                <li class="divider">
-								</li>
-								<li>
-									 <a href="{% url 'SA:state_zhihu' %}">知乎</a>
-								</li>
-							</ul>
+                        <li class="active">
+							 <a href="{% url 'SA:state' %}">动态</a>
 						</li>
 						<li class="dropdown">
 							 <a href="#" class="dropdown-toggle" data-toggle="dropdown">分析<strong class="caret"></strong></a>
@@ -84,30 +69,16 @@
 	</div>
         <div class="row clearfix">
         <div class="col-md-3 column">
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">选择用户
-                    <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                    <li>
-                        <a id="action-1" href="#">jmeter</a>
-                    </li>
-                    <li>
-                        <a href="#">EJB</a>
-                    </li>
-                    <li>
-                        <a href="#">Jasper Report</a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <a href="#">分离的链接</a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <a href="#">另一个分离的链接</a>
-                    </li>
-                </ul>
-            </li>
+            <div class="list-group">
+                {% block list %}
+                    <a href="#" class="list-group-item active"><h4>关注列表</h4></a>
+                    {% for f in follows %}
+                    <div class="list-group-item">
+                        <a href='{% url 'SA:state_detail' f.id %}'><h4>{{ f.tag_name }}</h4></a>
+                    </div>
+                    {% endfor %}
+                {% endblock %}
+            </div>
         </div>
         <div class="col-md-9 column">
             {% block content %}

@@ -162,75 +162,35 @@ def add_zhihu(request):
 
 @csrf_exempt
 @login_required
-def state_weibo(request):
-    user = request.user
-    userinfo = user.userinfo
-    weibo_friends = userinfo.weibo_friend.all()
-    friends = []
-
-    for f in weibo_friends:
-        states = get_weibo_state(f.weibo_id)
-        friend_info = get_weibo_profile(f.weibo_id)
-
-        friend = {}
-        friend['info'] = friend_info
-        friend['time'] = []
-        friend['content'] = []
-        friend['like'] = []
-        friend['comment_num'] = []
-
-        for state in states:
-            friend['time'].append(state['PubTime'])
-            friend['content'].append(state['Content'])
-            friend['like'].append(state['Like'])
-            friend['comment_num'].append(state['Comment'])
-
-        friends.append(friend)
-
-    print(friends)
-
-    return render(request,'SA/state_weibo.html',{})
-
-@csrf_exempt
-@login_required
-def state_tieba(request):
-    return render(request,'SA/state_tieba.html',{})
-
-@csrf_exempt
-@login_required
-def state_zhihu(request):
-    return render(request,'SA/state_zhihu.html',{})
-
-@csrf_exempt
-@login_required
 def state(request):
     user = request.user
     userinfo = user.userinfo
-    weibo_friends = userinfo.weibo_friend.all()
-    friends = []
 
-    for f in weibo_friends:
-        states = get_weibo_state(f.weibo_id)
-        friend_info = get_weibo_profile(f.weibo_id)
+    follows = userinfo.follow_set.all()
 
-        friend = {}
-        friend['info'] = friend_info
-        friend['time'] = []
-        friend['content'] = []
-        friend['like'] = []
-        friend['comment_num'] = []
+    context = {}
+    context['follows'] = follows
 
-        for state in states:
-            friend['time'].append(state['PubTime'])
-            friend['content'].append(state['Content'])
-            friend['like'].append(state['Like'])
-            friend['comment_num'].append(state['Comment'])
+    return render(request,'SA/state.html',context)
 
-        friends.append(friend)
+@csrf_exempt
+@login_required
+def state_detail(request,follow_id):
+    user = request.user
+    userinfo = user.userinfo
+    friend = Follow.objects.get(id=follow_id)
+    follows = userinfo.follow_set.all()
 
-    print(friends)
+    context = {}
 
-    return render(request,'SA/state_weibo.html',{})
+    context['follows'] = follows
+
+
+    return  render(request,'SA/state_detail.html',context)
+
+
+
+
 
 
 

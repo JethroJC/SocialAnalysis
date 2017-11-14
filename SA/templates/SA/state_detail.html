@@ -23,8 +23,25 @@
 
 					<div class="tab-pane active" id="panel-1">
                         <div class="row clearfix">
-
-
+                        {% for w in weibo %}
+                            <blockquote>
+                                <div class="col-md-2 column">
+                                     <img onerror="this.src='/media/head/default.jpg'" src="{{ weibo_img_src }}" height="60" width="60"  class="img-circle" />
+                                </div>
+                                <div class="col-md-10 column">
+                                    <h3 class="text-left text-info">
+                                        {{ weibo_name }}
+                                    </h3>
+                                    <p>
+                                        <br>
+                                        {{ w.weibo_content }}
+                                    </p>
+                                </div>
+                                <span class="glyphicon glyphicon-calendar" style="color: rgb(0, 163, 255); font-size: 17px;">{{ w.weibo_time }}</span>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <span class="glyphicon glyphicon-comment" style="color: rgb(255, 0, 0);font-size: 17px;">{{ w.weibo_comment }}</span>
+			                </blockquote>
+                        {% endfor %}
                         </div>
                             <br>
                     </div>

@@ -185,8 +185,23 @@ def state_detail(request,follow_id):
 
     context['follows'] = follows
 
+    weibo_profile = get_weibo_profile(friend.weibo_id)
+    context['weibo_img_src'] = weibo_profile['Avator']
+    context['weibo_url'] = weibo_profile['URL']
+    context['weibo_name'] = weibo_profile['NickName']
 
-    return  render(request,'SA/state_detail.html',context)
+    weibo_states = get_weibo_state(friend.weibo_id)
+    context['weibo'] = []
+
+    for s in weibo_states:
+        temp = {}
+        temp['weibo_content'] = s['Content']
+        temp['weibo_time'] = s['PubTime']
+        temp['weibo_comment'] = s['Comment']
+
+        context['weibo'].append(temp)
+
+    return render(request,'SA/state_detail.html',context)
 
 
 

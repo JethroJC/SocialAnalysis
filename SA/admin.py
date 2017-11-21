@@ -16,8 +16,10 @@ class MyUserAdmin(UserAdmin):
     )
     inlines = (UserInfoInline,)
 
-
+class FollowAdmin(admin.ModelAdmin):
+    pass
 
 admin.site.unregister(User)
 admin.site.register(User,MyUserAdmin)
+admin.site.register(Follow,FollowAdmin)
 

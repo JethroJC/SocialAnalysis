@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import UserInfo
+from .models import *
 from django.contrib.auth.models import User
 import json
 from django.views.decorators.csrf import csrf_exempt
@@ -68,6 +68,7 @@ def user_register(request):
         return render_to_response('404.html')
 
 @csrf_exempt
+@login_required
 def home(request):
     return render(request,'SA/home.html',{})
 
@@ -94,56 +95,117 @@ def person_info(request):
 
     context['img_path'] = img_path
 
+    follows = userinfo.follow_set.all()
+
+    context['follows'] = follows
+
     return render(request,'SA/person_info.html',context)
 
 @csrf_exempt
-def person_weibo(request):
-    return render(request,'SA/person_weibo.html',{})
+@login_required
+def person_detail(request,follow_id):
+    user = request.user
+    userinfo = user.userinfo
+    friend = Follow.objects.get(id=follow_id)
+
+    context = {}
+
+    follows = userinfo.follow_set.all()
+    context['follows'] = follows
+    context['follow_id'] = follow_id
+
+    document = get_weibo_profile(friend.weibo_id)
+    context['weibo_name'] = document['NickName']
+    context['weibo_img_src'] = document['Avator']
+    context['weibo_province'] = document['Province']
+    context['weibo_city'] = document['City']
+    context['weibo_url'] = document['URL']
+
+    context['zhihu_name'] = friend.zhihu_username
+    context['friend'] = friend
+
+    context['tieba_name'] = friend.tieba_username
+
+    return render(request,'SA/person_detail.html',context)
 
 @csrf_exempt
+@login_required
 def add_weibo(request):
     if request.method == 'POST':
         info = request.POST
         username = info['username']
         homepage_url = info['homepage_url']
-        flag,img,location,profile = get_weibo_profile(username,homepage_url)
+        weibo_id = info['weibo_id']
+        document = get_weibo_profile(weibo_id)
 
-        if flag == 0:
+        '''
+        if document == {}:
+            Weibo(username=username,homepage_url=homepage_url,weibo_id=weibo_id).save()
             result = {'status': 'success'}
             return HttpResponse(json.dumps(result), content_type='application/json')
         else:
             result = {'status': 'error'}
             return HttpResponse(json.dumps(result), content_type='application/json')
+        '''
     else:
         return render_to_response('404.html')
 
 @csrf_exempt
+@login_required
 def add_tieba(request):
     pass
 
 @csrf_exempt
+@login_required
 def add_zhihu(request):
     pass
 
 @csrf_exempt
-def person_tieba(request):
-    return render(request,'SA/person_tieba.html',{})
+@login_required
+def state(request):
+    user = request.user
+    userinfo = user.userinfo
+
+    follows = userinfo.follow_set.all()
+
+    context = {}
+    context['follows'] = follows
+
+    return render(request,'SA/state.html',context)
 
 @csrf_exempt
-def person_zhihu(request):
-    return render(request,'SA/person_zhihu.html',{})
+@login_required
+def state_detail(request,follow_id):
+    user = request.user
+    userinfo = user.userinfo
+    friend = Follow.objects.get(id=follow_id)
+    follows = userinfo.follow_set.all()
 
-@csrf_exempt
-def state_weibo(request):
-    return render(request,'SA/state_weibo.html',{})
+    context = {}
 
-@csrf_exempt
-def state_tieba(request):
-    return render(request,'SA/state_tieba.html',{})
+    context['follows'] = follows
 
-@csrf_exempt
-def state_zhihu(request):
-    return render(request,'SA/state_zhihu.html',{})
+    weibo_profile = get_weibo_profile(friend.weibo_id)
+    context['weibo_img_src'] = weibo_profile['Avator']
+    context['weibo_url'] = weibo_profile['URL']
+    context['weibo_name'] = weibo_profile['NickName']
+
+    weibo_states = get_weibo_state(friend.weibo_id)
+    context['weibo'] = []
+
+    for s in weibo_states:
+        temp = {}
+        temp['weibo_content'] = s['Content']
+        temp['weibo_time'] = s['PubTime']
+        temp['weibo_comment'] = s['Comment']
+
+        context['weibo'].append(temp)
+
+    return render(request,'SA/state_detail.html',context)
+
+
+
+
 
 
 

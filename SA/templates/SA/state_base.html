@@ -84,6 +84,7 @@
 	</div>
         <div class="row clearfix">
         <div class="col-md-3 column">
+            {% block list %}
             <div class="list-group">
                 <a href="{% url 'SA:state_weibo' %}" class="list-group-item active"><h4>微博动态</h4></a>
                 <div class="list-group-item">
@@ -93,6 +94,7 @@
                     <span class="badge">{{ counts.1 }}</span> <a href='{% url 'SA:state_zhihu' %}'><h4>知乎动态</h4></a>
                 </div>
             </div>
+            {% endblock %}
         </div>
         <div class="col-md-9 column">
             {% block content %}

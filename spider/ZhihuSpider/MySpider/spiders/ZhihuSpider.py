@@ -1,5 +1,11 @@
-from scrapy.spider import Spider
-from scrapy.selector import HtmlXPathSelector
+
+import datetime
+import requests
+import re
+import time
+from lxml import etree
+from scrapy import Spider
+from scrapy.selector import Selector
 from scrapy.http import Request
 
 class ZhihuSpider(Spider):
@@ -12,10 +18,6 @@ class ZhihuSpider(Spider):
             yield Request(url="https://www.zhihu.com/people/%s/activities" % uid, callback=self.parse_information)
 
     def parse_information(self, response):
-        #filename = response.url.split("/")[-2]
-        open('pagewatch.txt', 'wb').write(response.body)
-        # sel = HtmlXPathSelector(response)
-        # sites = sel.xpath('//div[@class="one-cont-title clearfix"]//i')
-        # for site in sites:
-        #     content = site.xpath('text()').extract()
-        #     print(content)
+        selector = Selector(response)
+        ID = re.findall('(\d+)/profile', response.url)[0]
+        divs = selector.xpath('body/div[@class="c" and @id]')

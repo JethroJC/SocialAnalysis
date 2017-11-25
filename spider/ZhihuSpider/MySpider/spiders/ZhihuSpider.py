@@ -1,9 +1,5 @@
 
-import datetime
-import requests
 import re
-import time
-from lxml import etree
 from scrapy import Spider
 from scrapy.selector import Selector
 from scrapy.http import Request

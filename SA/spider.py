@@ -1,5 +1,5 @@
 import pymongo
-import Spiders.ZhihuSpider2.ZhihuSpider
+from SA.Spiders.ZhihuSpider2.ZhihuSpider import ZhihuSpider
 from scrapy import Item, Field
 
 def get_weibo_profile(weibo_id):
@@ -39,10 +39,14 @@ def get_weibo_state(weibo_id):
     else:
         return []
 
+def hehe():
+    s = ZhihuSpider()
+    s.findPerson('xie-yun-chen-74')
 
 if __name__ == "__main__":
     try:
         print(get_weibo_profile('5066999620'))
         print(get_weibo_state('5066999620'))
+        hehe()
     except Exception as e:
         print(e)

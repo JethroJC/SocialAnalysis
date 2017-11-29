@@ -125,9 +125,15 @@ def person_detail(request,follow_id):
         context['weibo_city'] = document['City']
 
     context['weibo_url'] = document['URL']
+    context['friend'] = friend
 
     context['zhihu_name'] = friend.zhihu_username
-    context['friend'] = friend
+    if not friend.zhihu_username == '':
+        document2 = get_zhihu_profile(friend.zhihu_id)
+
+        context['zhihu_img_src'] = document2['avatar_url']
+        context['answer_count'] = document2['answer_count']
+        context['articles_count'] = document2['articles_count']
 
     context['tieba_name'] = friend.tieba_username
 
@@ -137,21 +143,24 @@ def person_detail(request,follow_id):
 @login_required
 def add_weibo(request):
     if request.method == 'POST':
-        info = request.POST
-        username = info['username']
-        homepage_url = info['homepage_url']
-        weibo_id = info['weibo_id']
-        document = get_weibo_profile(weibo_id)
+        try:
+            info = request.POST
+            username = info['username']
+            homepage_url = info['homepage_url']
+            weibo_id = info['weibo_id']
+            follow_id = info['follow_id']
 
-        '''
-        if document == {}:
-            Weibo(username=username,homepage_url=homepage_url,weibo_id=weibo_id).save()
-            result = {'status': 'success'}
+            follow = Follow.objects.get(id=follow_id)
+            follow.weibo_id = weibo_id
+            follow.weibo_url = homepage_url
+
+            result = {'status':'success'}
+
             return HttpResponse(json.dumps(result), content_type='application/json')
-        else:
-            result = {'status': 'error'}
+        except :
+            result = {'status':'error'}
+
             return HttpResponse(json.dumps(result), content_type='application/json')
-        '''
     else:
         return render_to_response('404.html')
 
@@ -163,7 +172,28 @@ def add_tieba(request):
 @csrf_exempt
 @login_required
 def add_zhihu(request):
-    pass
+    if request.method == 'POST':
+        try:
+            info = request.POST
+            username = info['username']
+            homepage_url = info['homepage_url']
+            follow_id = info['follow_id']
+
+            follow = Follow.objects.get(id=follow_id)
+            follow.zhihu_username =username
+            follow.zhihu_url = homepage_url
+            follow.zhihu_id = homepage_url.split('/')[4]
+            follow.save()
+
+            result = {'status':'success'}
+
+            return HttpResponse(json.dumps(result), content_type='application/json')
+        except :
+            result = {'status':'error'}
+
+            return HttpResponse(json.dumps(result), content_type='application/json')
+    else:
+        return render_to_response('404.html')
 
 @csrf_exempt
 @login_required

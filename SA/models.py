@@ -14,14 +14,18 @@ class UserInfo(models.Model):
         return self.user.username
 
 class Follow(models.Model):
+    '''
+    微博通过微博id查询
+    知乎通过知乎id查询,知乎id通过url截取得到
+    '''
     tag_name = models.CharField(max_length=100,default=" ",blank=True)
-    weibo_username = models.CharField(max_length=100,default=" ",blank=True)
     weibo_url = models.CharField(max_length=200,default=" ",blank=True)
     weibo_id = models.CharField(max_length=20,default=" ",blank=True)
     tieba_username = models.CharField(max_length=100,default=" ",blank=True)
     tieba_url = models.CharField(max_length=200,default=" ",blank=True)
     zhihu_username = models.CharField(max_length=100,default=" ",blank=True)
     zhihu_url = models.CharField(max_length=200,default=" ",blank=True)
+    zhihu_id = models.CharField(max_length=20,default=" ",blank=True)
 
     follow_by = models.ForeignKey(UserInfo)
 

@@ -39,14 +39,15 @@ def get_weibo_state(weibo_id):
     else:
         return []
 
-def hehe():
+def get_zhihu_profile(zhihu_id):
     s = ZhihuSpider()
-    s.findPerson('xie-yun-chen-74')
+    document = s.findPerson(zhihu_id)
+
+    return  document
 
 if __name__ == "__main__":
     try:
         print(get_weibo_profile('5066999620'))
         print(get_weibo_state('5066999620'))
-        hehe()
     except Exception as e:
         print(e)

@@ -137,7 +137,7 @@
                                 <form class="form-horizontal" role="form" id="add_weibo_form" method="post">
                                        {% csrf_token %}
                                         <div class="form-group">
-                                             <label for="inputEmail3" class="col-sm-2 control-label">账号</label>
+                                             <label for="inputEmail3" class="col-sm-2 control-label">用户名</label>
                                             <div class="col-sm-10">
                                                 <input  class="form-control" id="username" name="username" />
                                             </div>
@@ -197,7 +197,7 @@
                                                 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                                                 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                                                 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-                                                <img onerror="this.src='/media/head/default.jpg'" src="{{ weibo_img_src }}"height="60" width="60"  class="img-circle" />
+                                                <img onerror="this.src='/media/head/default.jpg'" src="{{ zhihu_img_src }}"height="60px" width="60px"  class="img-circle" />
                                             </td>
                                         </tr>
                                         <tr >
@@ -227,14 +227,14 @@
                                                 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                                                 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
                                                 <font size="5">
-                                                {{ weibo_name }}
+                                                {{ zhihu_name }}
                                                 </font>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>
                                                 <h3>
-                                                    地址
+                                                    文章数
                                                 </h3>
                                             </td>
                                             <td>
@@ -258,7 +258,39 @@
                                                 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                                                 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                                                 <font size="5">
-                                                {{ weibo_province }} {{ weibo_city }}
+                                                {{ articles_count }}
+                                                </font>
+                                            </td>
+                                        </tr>
+
+                                         <tr>
+                                            <td>
+                                                <h3>
+                                                    回答数
+                                                </h3>
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+                                                <br>
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                <font size="5">
+                                                {{ answer_count }}
                                                 </font>
                                             </td>
                                         </tr>
@@ -273,7 +305,7 @@
                                 <form class="form-horizontal" role="form" id="add_zhihu_form" method="post">
                                        {% csrf_token %}
                                         <div class="form-group">
-                                             <label for="inputEmail3" class="col-sm-2 control-label">账号</label>
+                                             <label for="inputEmail3" class="col-sm-2 control-label">用户名</label>
                                             <div class="col-sm-10">
                                                 <input  class="form-control" id="username" name="username" />
                                             </div>
@@ -281,15 +313,10 @@
                                         <div class="form-group">
                                              <label for="inputPassword3" class="col-sm-2 control-label">主页地址</label>
                                             <div class="col-sm-10">
-                                                <input  class="form-control" id="homepage_url" name="homepage_url"/>
+                                                <input class="form-control" id="homepage_url" name="homepage_url"/>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                             <label for="inputPassword3" class="col-sm-2 control-label">用户id</label>
-                                            <div class="col-sm-10">
-                                                <input  class="form-control" id="weibo_id" name="weibo_id"/>
-                                            </div>
-                                        </div>
+                                        <input type="hidden" id="follow_id" name="follow_id" value="{{ follow_id }}">
                                         <div class="form-group">
                                             <div class="col-sm-offset-2 col-sm-10">
                                                  <button type="submit" class="btn btn-default" id="add_zhihu">添加</button>
@@ -332,7 +359,7 @@
                                                 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                                                 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                                                 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-                                                <img onerror="this.src='/media/head/default.jpg'" src="{{ weibo_img_src }}"height="60" width="60"  class="img-circle" />
+                                                <img onerror="this.src='/media/head/default.jpg'" src="{{ weibo_img_src }}"height="60px" width="60px"  class="img-circle" />
                                             </td>
                                         </tr>
                                         <tr >
@@ -443,13 +470,13 @@
 
     <script type="text/javascript">
       $(document).ready(function(){
-        $('#add').on('click',function(){
-            let weibo_info = $('#add_form').serialize();
+        $('#add_zhihu').on('click',function(){
+            let zhihu_info = $('#add_zhihu_form').serialize();
             $.ajax({
-                    url: "{% url 'SA:add_weibo' %}",
+                    url: "{% url 'SA:add_zhihu' %}",
                     type: "post",
                     datatype: "json",
-                    data: weibo_info,
+                    data: zhihu_info,
                     async: false,
                     success: function(ret) {
                         if(ret.status === "success"){

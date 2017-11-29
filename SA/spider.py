@@ -1,4 +1,5 @@
 import pymongo
+import Spiders.ZhihuSpider2.ZhihuSpider
 from scrapy import Item, Field
 
 def get_weibo_profile(weibo_id):

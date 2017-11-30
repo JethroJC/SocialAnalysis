@@ -45,6 +45,16 @@ def get_zhihu_profile(zhihu_id):
 
     return  document
 
+def get_zhihu_state(zhihu_id):
+    conn = pymongo.MongoClient("localhost", 27017)
+    db = conn["Zhihu"]
+    Tweets = db['Tweets']
+    item = Tweets.find({'user': zhihu_id})
+    if item:
+        return  [dict(x) for x in item]
+    else:
+        return []
+
 if __name__ == "__main__":
     try:
         print(get_weibo_profile('5066999620'))

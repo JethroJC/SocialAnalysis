@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .models import *
 from django.contrib.auth.models import User
 import json
+import time
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -9,6 +10,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, render_to_response, \
     HttpResponse, HttpResponseRedirect
 from .spider import *
+from django.utils.safestring import mark_safe
+
 
 @csrf_exempt
 def index(request):
@@ -114,28 +117,33 @@ def person_detail(request,follow_id):
     context['follows'] = follows
     context['follow_id'] = follow_id
 
-    document = get_weibo_profile(friend.weibo_id)
-    context['weibo_name'] = document['NickName']
-    context['weibo_img_src'] = document['Avator']
+    #微博
+    if not friend.weibo_url == '':
+        document = get_weibo_profile(friend.weibo_id)
+        context['weibo_name'] = document['NickName']
+        context['weibo_img_src'] = document['Avator']
 
-    if 'Province' in document:
-        context['weibo_province'] = document['Province']
+        if 'Province' in document:
+            context['weibo_province'] = document['Province']
 
-    if 'City' in document:
-        context['weibo_city'] = document['City']
+        if 'City' in document:
+            context['weibo_city'] = document['City']
 
-    context['weibo_url'] = document['URL']
-    context['friend'] = friend
+        context['weibo_url'] = document['URL']
+        context['friend'] = friend
 
-    context['zhihu_name'] = friend.zhihu_username
-    if not friend.zhihu_username == '':
+    #知乎
+    if not friend.zhihu_url == '':
         document2 = get_zhihu_profile(friend.zhihu_id)
 
+        context['zhihu_name'] = document2['name']
         context['zhihu_img_src'] = document2['avatar_url']
         context['answer_count'] = document2['answer_count']
         context['articles_count'] = document2['articles_count']
 
-    context['tieba_name'] = friend.tieba_username
+    #贴吧
+    if not friend.tieba_url == '':
+        pass
 
     return render(request,'SA/person_detail.html',context)
 
@@ -220,6 +228,7 @@ def state_detail(request,follow_id):
 
     context['follows'] = follows
 
+    #微博动态
     weibo_profile = get_weibo_profile(friend.weibo_id)
     context['weibo_img_src'] = weibo_profile['Avator']
     context['weibo_url'] = weibo_profile['URL']
@@ -236,6 +245,21 @@ def state_detail(request,follow_id):
         temp['weibo_comment'] = s['Comment']
 
         context['weibo'].append(temp)
+
+    #知乎动态
+    zhihu_states = get_zhihu_state(friend.zhihu_id)
+    for s in zhihu_states:
+        timestamp = s['created_time']
+        time_local = time.localtime(timestamp)
+        s['created_time'] = time.strftime("%Y-%m-%d %H:%M:%S",time_local)
+        if s['type'] == 'VOTEUP_ANSWER':
+            s['answer_content'] = mark_safe(s['answer_content'])
+        elif s['type'] == 'CREATE_ANSWER':
+            s['answer_content'] = mark_safe(s['answer_content'])
+        else:
+            pass
+
+    context['zhihu'] = zhihu_states
 
     return render(request,'SA/state_detail.html',context)
 

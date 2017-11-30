@@ -47,8 +47,76 @@
                     </div>
 
                     <div class="tab-pane" id="panel-2">
+                    <br>
                         <div class="row clearfix">
+                            {% for z in zhihu %}
+                                {% if z.type == 'VOTEUP_ANSWER' %}
+                                    <div class="jumbotron">
+                                        <h5>
+                                            赞同了回答
+                                        </h5>
+                                        <h3>
+                                            <a href="https://www.zhihu.com/question/{{ z.question_id }}/answer/{{ z.answer_id }}" target="_blank">
+                                            {{ z.question_title }}
+                                            </a>
+                                        </h3>
+                                        <br>
+                                        <p>
+                                            {{ z.answer_content }}
+                                        </p>
+                                        <span class="glyphicon glyphicon-calendar pull-right" style="color: rgb(0, 163, 255); font-size: 17px;">{{ z.created_time }}</span>
+                                        <p>
 
+                                        </p>
+                                    </div>
+                                {% endif %}
+
+                                {% if z.type == 'FOLLOW_QUESTION' %}
+                                    <div class="jumbotron">
+                                        <h5>
+                                            关注了问题
+                                        </h5>
+                                        <h3>
+                                            <a href="https://www.zhihu.com/question/{{ z.question_id }}" target="_blank">
+                                            {{ z.question_title }}
+                                            </a>
+                                        </h3>
+                                        <span class="glyphicon glyphicon-calendar pull-right" style="color: rgb(0, 163, 255); font-size: 17px;">{{ z.created_time }}</span>
+                                    </div>
+                                {% endif %}
+
+                                {% if z.type == 'CREATE_ANSWER' %}
+                                    <div class="jumbotron">
+                                        <h5>
+                                            回答了问题
+                                        </h5>
+                                        <h3>
+                                            <a href="https://www.zhihu.com/question/{{ z.question_id }}/answer/{{ z.answer_id }}" target="_blank">
+                                            {{ z.question_title }}
+                                            </a>
+                                        </h3>
+                                        <p>
+                                            {{ z.answer_content }}
+                                        </p>
+                                        <span class="glyphicon glyphicon-calendar pull-right" style="color: rgb(0, 163, 255); font-size: 17px;">{{ z.created_time }}</span>
+                                    </div>
+                                {% endif %}
+
+                                {% if z.type == 'CREATE_QUESTION' %}
+                                    <div class="jumbotron">
+                                        <h5>
+                                            提出了问题
+                                        </h5>
+                                        <h3>
+                                            <a href="https://www.zhihu.com/question/{{ z.question_id }}" target="_blank">
+                                            {{ z.question_title }}
+                                            </a>
+                                        </h3>
+                                         <span class="glyphicon glyphicon-calendar pull-right" style="color: rgb(0, 163, 255); font-size: 17px;">{{ z.created_time }}</span>
+                                    </div>
+                                {% endif %}
+
+                            {% endfor %}
                         </div>
                             <br>
                     </div>

@@ -3,6 +3,7 @@ from .models import *
 from django.contrib.auth.models import User
 import json
 import time
+import operator
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -149,6 +150,11 @@ def person_detail(request,follow_id):
 
 @csrf_exempt
 @login_required
+def add_person(request):
+    pass
+
+@csrf_exempt
+@login_required
 def add_weibo(request):
     if request.method == 'POST':
         try:
@@ -235,6 +241,7 @@ def state_detail(request,follow_id):
     context['weibo_name'] = weibo_profile['NickName']
 
     weibo_states = get_weibo_state(friend.weibo_id)
+    #weibo_states = weibo_states.sort(key=lambda x:datetime.datetime.strptime(x['PubTime'],'%Y-%m-%d %H:%M') if 'PubTime' in x else datetime.datetime())
     context['weibo'] = []
 
     for s in weibo_states:

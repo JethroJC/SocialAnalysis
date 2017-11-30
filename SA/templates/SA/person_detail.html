@@ -9,6 +9,9 @@
         <a href='{% url 'SA:person_detail' f.id %}'><h4>{{ f.tag_name }}</h4></a>
     </div>
     {% endfor %}
+    <br>
+    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#add_person_modal">添加关注</button>
+
 {% endblock %}
 
 {% block content %}
@@ -461,6 +464,78 @@
 			</div>
 		</div>
 	</div>
+
+
+
+    <div id="add_person_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content text-center">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">添加关注</h4>
+            </div>
+            <div class="modal-body">
+                <form id="add_person_form" class="form-horizontal" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="username" class="col-sm-2 control-label">用户名</label>
+                        <div class="col-sm-10">
+                            <input id="username" type="text" class="form-control" name="username">
+                        </div>
+                    </div>
+                    <h4>
+                        微博信息
+                    </h4>
+                    <div class="form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">主页地址</label>
+                        <div class="col-sm-10">
+                            <input  class="form-control" id="weibo_homepage_url" name="weibo_homepage_url"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">用户id</label>
+                        <div class="col-sm-10">
+                            <input  class="form-control" id="weibo_id" name="weibo_id"/>
+                        </div>
+                    </div>
+
+                    <h4>
+                        知乎信息
+                    </h4>
+
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">用户名</label>
+                        <div class="col-sm-10">
+                            <input  class="form-control" id="zhihu_username" name="zhihu_username" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">主页地址</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="zhihu_homepage_url" name="zhihu_homepage_url"/>
+                        </div>
+                    </div>
+
+
+                    <h4>
+                        贴吧信息
+                    </h4>
+
+                    <div class="form-group">
+                        <div class="col-sm-10">
+                            <button id="add_person_button" type="button" class="btn btn-primary">添加</button>
+                        </div>
+                    </div>
+                </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
     <script type="text/javascript">

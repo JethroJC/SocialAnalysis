@@ -1,6 +1,18 @@
 import pymongo
 from SA.Spiders.ZhihuSpider2.ZhihuSpider import ZhihuSpider
 from scrapy import Item, Field
+import datetime
+
+def cmp_datetime(a, b):
+    a_datetime = datetime.datetime.strptime(a, '%Y-%m-%d %H:%M')
+    b_datetime = datetime.datetime.strptime(b, '%Y-%m-%d %H:%M')
+
+    if a_datetime > b_datetime:
+        return -1
+    elif a_datetime < b_datetime:
+        return 1
+    else:
+        return 0
 
 def get_weibo_profile(weibo_id):
     '''

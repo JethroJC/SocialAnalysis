@@ -67,6 +67,30 @@ def get_zhihu_state(zhihu_id):
     else:
         return []
 
+def update_weibo(weibo_id):
+    '''
+
+    :param weibo_id:
+    :return: int 表示更新出了几条新动态
+    '''
+    pass
+
+def update_zhihu(zhihu_id):
+    '''
+
+    :param zhihu_id:
+    :return: int 表示更新出了几条新动态
+    '''
+    pass
+
+def update_tieba(tieba_id):
+    '''
+
+    :param tieba_id:
+    :return: int 标识更新出了几条新动态
+    '''
+    pass
+
 if __name__ == "__main__":
     try:
         print(get_weibo_profile('5066999620'))

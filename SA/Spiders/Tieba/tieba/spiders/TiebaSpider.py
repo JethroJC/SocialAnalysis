@@ -13,7 +13,13 @@ from tieba.config import tiebaID
 class TiebaSpider(scrapy.Spider):
     name = "Tieba"
     allowed_domains = ["tieba.baidu.com"]
-    start_urls = list(set(tiebaID))
+
+    def __init__(self, category=None, *args, **kwargs):
+        super(TiebaSpider, self).__init__(*args, **kwargs)
+        if category == None:
+            self.start_urls = list(set(tiebaID))
+        else:
+            self.start_urls = [category]
 
     def start_requests(self):
         for uid in self.start_urls:

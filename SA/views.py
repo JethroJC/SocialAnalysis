@@ -117,8 +117,13 @@ def person_detail(request,follow_id):
     document = get_weibo_profile(friend.weibo_id)
     context['weibo_name'] = document['NickName']
     context['weibo_img_src'] = document['Avator']
-    context['weibo_province'] = document['Province']
-    context['weibo_city'] = document['City']
+
+    if 'Province' in document:
+        context['weibo_province'] = document['Province']
+
+    if 'City' in document:
+        context['weibo_city'] = document['City']
+
     context['weibo_url'] = document['URL']
 
     context['zhihu_name'] = friend.zhihu_username
@@ -196,7 +201,8 @@ def state_detail(request,follow_id):
     for s in weibo_states:
         temp = {}
         temp['weibo_content'] = s['Content']
-        temp['weibo_time'] = s['PubTime']
+        if 'PubTime' in s:
+            temp['weibo_time'] = s['PubTime']
         temp['weibo_comment'] = s['Comment']
 
         context['weibo'].append(temp)

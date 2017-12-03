@@ -1,6 +1,7 @@
 import pymongo
 from SA.Spiders.ZhihuSpider2.ZhihuSpider import ZhihuSpider
 from scrapy import Item, Field
+import os
 import datetime
 
 def cmp_datetime(a, b):
@@ -73,9 +74,15 @@ def update_weibo(weibo_id):
     :param weibo_id:
     :return: int 表示更新出了几条新动态
     '''
-
-
-    pass
+    conn = pymongo.MongoClient("localhost", 27017)
+    db = conn["Weibo"]
+    Tweets = db['Tweets']
+    count_before = Tweets.find({'ID': weibo_id}).count()
+    os.chdir('SA/Spiders/WeiboSpider-master/')
+    os.system(('python run.py %s' % weibo_id))
+    os.chdir('../../../')
+    count_after = Tweets.find({'ID': weibo_id}).count()
+    return count_after - count_before
 
 def update_zhihu(zhihu_id):
     '''
@@ -83,7 +90,14 @@ def update_zhihu(zhihu_id):
     :param zhihu_id:
     :return: int 表示更新出了几条新动态
     '''
-    pass
+    conn = pymongo.MongoClient("localhost", 27017)
+    db = conn["Zhihu"]
+    Tweets = db['Tweets']
+    count_before = Tweets.find({'user': zhihu_id}).count()
+    s = ZhihuSpider()
+    s.updatePerson(zhihu_id)
+    count_after = Tweets.find({'user': zhihu_id}).count()
+    return count_after - count_before
 
 def update_tieba(tieba_id):
     '''
@@ -91,11 +105,19 @@ def update_tieba(tieba_id):
     :param tieba_id:
     :return: int 标识更新出了几条新动态
     '''
-    pass
+    conn = pymongo.MongoClient("localhost", 27017)
+    db = conn["Tieba"]
+    Tweets = db['Tweets']
+    count_before = Tweets.find({'User': tieba_id}).count()
+    os.chdir('SA/Spiders/Tieba/')
+    os.system(('python run.py %s' % tieba_id))
+    os.chdir('../../../')
+    count_after = Tweets.find({'User': tieba_id}).count()
+    return count_after - count_before
 
 if __name__ == "__main__":
     try:
-        print(get_weibo_profile('5066999620'))
-        print(get_weibo_state('5066999620'))
+        os.chdir('../')
+        print(update_zhihu('excited-vczh'))
     except Exception as e:
         print(e)

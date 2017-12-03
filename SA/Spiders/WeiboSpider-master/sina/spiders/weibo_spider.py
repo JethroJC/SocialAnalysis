@@ -23,7 +23,7 @@ class Spider(Spider):
     def __init__(self, category=None, *args, **kwargs):
         super(Spider, self).__init__(*args, **kwargs)
         if category == None:
-            start_urls = list(set(weiboID))
+            self.start_urls = list(set(weiboID))
         else:
             self.start_urls = [category]
 

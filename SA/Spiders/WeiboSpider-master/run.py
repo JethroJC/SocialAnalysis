@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 # encoding: utf-8
 from scrapy import cmdline
-
-cmdline.execute("scrapy crawl SinaSpider".split(" "))
+import sys
+if len(sys.argv) == 1:
+    cmdline.execute("scrapy crawl SinaSpider".split(" "))
+else:
+    cmdline.execute(("scrapy crawl SinaSpider -a category=%s" % sys.argv[1]).split(" "))

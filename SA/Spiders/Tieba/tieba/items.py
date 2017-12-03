@@ -19,3 +19,10 @@ class TweetItem(scrapy.Item):
     Content = scrapy.Field()
     Content_url = scrapy.Field()
     Date = scrapy.Field()
+
+class Information(scrapy.Item):
+    _id = scrapy.Field()
+    Name = scrapy.Field()
+    Age = scrapy.Field()
+    Pages = scrapy.Field()
+    Follows = scrapy.Field()

@@ -22,5 +22,5 @@ class TiebaPipeline(object):
                 else:
                     self.Tweets.insert(dict(item))
             except Exception:
-                pass
+                print('False')
         return item

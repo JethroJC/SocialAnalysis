@@ -1,4 +1,9 @@
+#!/usr/bin/env python
+# encoding: utf-8
+
 import scrapy
+import re
+import urllib.parse
 from scrapy.selector import Selector
 from scrapy.http import Request
 
@@ -19,13 +24,16 @@ class TiebaSpider(scrapy.Spider):
         divs = selector.xpath('//div[@class="n_right clearfix"]')
         for div in divs:
             tweetItem = TweetItem()
-            date = div.xpath('div[@class="n_post_time"]//text()').extract()
+            tweetItem['Date'] = div.xpath('div[@class="n_post_time"]//text()').extract()[0]
+            user = re.findall('un=(.*)', response.url)[0]
+            tweetItem['User'] = urllib.parse.unquote(user)
             if len(div.xpath('div[@class="n_type type_zhuti"]')) > 0:
                 tweetItem['Type'] = 'zhuti'
                 tieba_name = div.xpath('div/div/div[@class="thread_name"]/a[@class="n_name"]//text()').extract()
                 tieba_url = div.xpath('div/div/div[@class="thread_name"]/a[@class="n_name"]/@href').extract()
                 title = div.xpath('div/div/div[@class="thread_name"]/a[@class="title"]//text()').extract()
                 title_url = div.xpath('div/div/div[@class="thread_name"]/a[@class="title"]/@href').extract()
+                tweetItem['_id'] = re.findall('pid=(\d+)&', str(title_url))[0]
                 if tieba_name:
                     tweetItem['Tieba_name'] = tieba_name[0]
                 if tieba_url:
@@ -36,12 +44,14 @@ class TiebaSpider(scrapy.Spider):
                     tweetItem['Title_url'] = title_url[0]
                 print(dict(tweetItem))
             elif len(div.xpath('div[@class="n_type type_huifu"]')) > 0:
+                tweetItem['Type'] = 'huifu'
                 tieba_name = div.xpath('div/div[@class="n_txt_huifu"]/a[@class="n_name"]//text()').extract()
                 tieba_url = div.xpath('div/div[@class="n_txt_huifu"]/a[@class="n_name"]/@href').extract()
                 title = div.xpath('div/div[@class="n_txt_huifu"]/a[@class="titletxt"]//text()').extract()
                 title_url = div.xpath('div/div[@class="n_txt_huifu"]/a[@class="titletxt"]/@href').extract()
                 content = div.xpath('div/div/div[@class="thread_name"]/a[@class="reply_content"]//text()').extract()
                 content_url = div.xpath('div/div/div[@class="thread_name"]/a[@class="reply_content"]/@href').extract()
+                tweetItem['_id'] = re.findall('pid=(\d+)&', str(content_url))[0]
                 if tieba_name:
                     tweetItem['Tieba_name'] = tieba_name[0]
                 if tieba_url:

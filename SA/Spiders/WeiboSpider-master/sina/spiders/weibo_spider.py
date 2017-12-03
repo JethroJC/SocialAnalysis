@@ -17,8 +17,15 @@ from sina.items import TweetsItem, InformationItem, RelationshipsItem
 class Spider(Spider):
     name = "SinaSpider"
     host = "https://weibo.cn"
-    start_urls = list(set(weiboID))
+    #start_urls = list(set(weiboID))
     #repeated = False
+
+    def __init__(self, category=None, *args, **kwargs):
+        super(Spider, self).__init__(*args, **kwargs)
+        if category == None:
+            start_urls = list(set(weiboID))
+        else:
+            self.start_urls = [category]
 
     def start_requests(self):
         for uid in self.start_urls:

@@ -73,6 +73,8 @@ def update_weibo(weibo_id):
     :param weibo_id:
     :return: int 表示更新出了几条新动态
     '''
+
+
     pass
 
 def update_zhihu(zhihu_id):

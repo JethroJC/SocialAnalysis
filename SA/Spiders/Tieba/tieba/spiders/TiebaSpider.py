@@ -7,7 +7,7 @@ import urllib.parse
 from scrapy.selector import Selector
 from scrapy.http import Request
 
-from tieba.items import TweetItem
+from tieba.items import TweetItem, Information
 from tieba.config import tiebaID
 
 class TiebaSpider(scrapy.Spider):
@@ -20,12 +20,29 @@ class TiebaSpider(scrapy.Spider):
             yield Request(url="http://tieba.baidu.com/home/main?un=%s" % uid, callback=self.parse)
 
     def parse(self, response):
+        user = re.findall('un=(.*)', response.url)[0]
         selector = Selector(response)
+        information = Information()
+        name = selector.xpath('//span[@class="userinfo_username "]//text()').extract()
+        spans = selector.xpath('//span[@class="user_name"]/span//text()').extract()
+
+        follows = selector.xpath('//div[@id="forum_group_wrap"]/a[not(@title)]/span[not(@class)]//text() |'
+                                '//div[@id="forum_group_wrap"]/a[(@title)]/@title').extract()
+
+        information['_id'] = urllib.parse.unquote(user)
+        if name:
+            information['Name'] = name[0]
+        if spans and len(spans) >= 2:
+            information['Age'] = spans[0]
+            information['Pages'] = spans[1]
+        information['Follows'] = " ".join(follows)
+
+        yield information
+
         divs = selector.xpath('//div[@class="n_right clearfix"]')
         for div in divs:
             tweetItem = TweetItem()
             tweetItem['Date'] = div.xpath('div[@class="n_post_time"]//text()').extract()[0]
-            user = re.findall('un=(.*)', response.url)[0]
             tweetItem['User'] = urllib.parse.unquote(user)
             if len(div.xpath('div[@class="n_type type_zhuti"]')) > 0:
                 tweetItem['Type'] = 'zhuti'
@@ -65,4 +82,4 @@ class TiebaSpider(scrapy.Spider):
                 if content_url:
                     tweetItem['Content_url'] = content_url[0]
                 print(dict(tweetItem))
-        yield tweetItem
+            yield tweetItem

@@ -13,6 +13,7 @@ person_pattern = [
 state_pattern = [
     url(r'^$',state,name='state'),
     url(r'^(?P<follow_id>[0-9]+)/$',state_detail,name='state_detail'),
+    url(r'^update_weibo/(?P<follow_id>[0-9]+)/$',update_weibo1,name='update_weibo'),
 ]
 
 analysis_pattern = [

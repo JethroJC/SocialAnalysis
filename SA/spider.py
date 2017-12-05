@@ -47,7 +47,14 @@ def get_weibo_state(weibo_id):
     Tweets = db['Tweets']
     item = Tweets.find({'ID': weibo_id})
     if item:
-        return  [dict(x) for x in item]
+        item = [dict(x) for x in item]
+
+        weibo_item2 = []
+        for x in item:
+            if 'PubTime' in x.keys():
+                weibo_item2.append(x)
+        weibo_item2 = sorted(weibo_item2,key=lambda x:x['PubTime'],reverse=True)
+        return  weibo_item2
     else:
         return []
 

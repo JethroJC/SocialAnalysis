@@ -1,6 +1,6 @@
 from zhihu_oauth import ZhihuClient, ActType
 import pymongo
-
+import  time
 class ZhihuSpider:
 
     client = ZhihuClient()
@@ -32,7 +32,10 @@ class ZhihuSpider:
                     d = {'_id': name + str(act.created_time)}
                     d['user'] = name
                     d['type'] = 'COLLECT_ANSWER'
-                    d['created_time'] = act.created_time
+
+                    timestamp = act.created_time
+                    time_local = time.localtime(timestamp)
+                    d['created_time'] = time.strftime("%Y-%m-%d %H:%M:%S",time_local)
 
                     d['question_id'] = question.id
                     d['question_title'] = question.title
@@ -60,7 +63,9 @@ class ZhihuSpider:
                     d = {'_id': name + str(act.created_time)}
                     d['user'] = name
                     d['type'] = 'COLLECT_ARTICLE'
-                    d['created_time'] = act.created_time
+                    timestamp = act.created_time
+                    time_local = time.localtime(timestamp)
+                    d['created_time'] = time.strftime("%Y-%m-%d %H:%M:%S",time_local)
 
                     d['article_id'] = article.id
                     d['article_title'] = article.title
@@ -86,7 +91,9 @@ class ZhihuSpider:
                     d = {'_id': name+str(act.created_time)}
                     d['user'] = name
                     d['type'] = 'CREATE_ANSWER'
-                    d['created_time'] = act.created_time
+                    timestamp = act.created_time
+                    time_local = time.localtime(timestamp)
+                    d['created_time'] = time.strftime("%Y-%m-%d %H:%M:%S",time_local)
 
                     d['question_id'] = question.id
                     d['question_title'] = question.title
@@ -110,7 +117,9 @@ class ZhihuSpider:
                     d = {'_id': name + str(act.created_time)}
                     d['user'] = name
                     d['type'] = 'CREATE_ARTICLE'
-                    d['created_time'] = act.created_time
+                    timestamp = act.created_time
+                    time_local = time.localtime(timestamp)
+                    d['created_time'] = time.strftime("%Y-%m-%d %H:%M:%S",time_local)
 
                     d['article_id'] = article.id
                     d['article_title'] = article.title
@@ -132,7 +141,9 @@ class ZhihuSpider:
                     d = {'_id': name + str(act.created_time)}
                     d['user'] = name
                     d['type'] = 'CREATE_QUESTION'
-                    d['created_time'] = act.created_time
+                    timestamp = act.created_time
+                    time_local = time.localtime(timestamp)
+                    d['created_time'] = time.strftime("%Y-%m-%d %H:%M:%S",time_local)
 
                     d['question_id'] = question.id
                     d['question_title'] = question.title
@@ -153,7 +164,9 @@ class ZhihuSpider:
                     d = {'_id': name + str(act.created_time)}
                     d['user'] = name
                     d['type'] = 'FOLLOW_COLLECTION'
-                    d['created_time'] = act.created_time
+                    timestamp = act.created_time
+                    time_local = time.localtime(timestamp)
+                    d['created_time'] = time.strftime("%Y-%m-%d %H:%M:%S",time_local)
 
                     d['collection_id'] = collection.id
                     d['collection_title'] = collection.title
@@ -174,7 +187,9 @@ class ZhihuSpider:
                     d = {'_id': name + str(act.created_time)}
                     d['user'] = name
                     d['type'] = 'FOLLOW_COLUMN'
-                    d['created_time'] = act.created_time
+                    timestamp = act.created_time
+                    time_local = time.localtime(timestamp)
+                    d['created_time'] = time.strftime("%Y-%m-%d %H:%M:%S",time_local)
 
                     d['column_id'] = column.id
                     d['column_description'] = column.description
@@ -196,7 +211,9 @@ class ZhihuSpider:
                     d = {'_id': name + str(act.created_time)}
                     d['user'] = name
                     d['type'] = 'FOLLOW_QUESTION'
-                    d['created_time'] = act.created_time
+                    timestamp = act.created_time
+                    time_local = time.localtime(timestamp)
+                    d['created_time'] = time.strftime("%Y-%m-%d %H:%M:%S",time_local)
 
                     d['question_id'] = question.id
                     d['question_title'] = question.title
@@ -217,7 +234,9 @@ class ZhihuSpider:
                     d = {'_id': name + str(act.created_time)}
                     d['user'] = name
                     d['type'] = 'FOLLOW_TOPIC'
-                    d['created_time'] = act.created_time
+                    timestamp = act.created_time
+                    time_local = time.localtime(timestamp)
+                    d['created_time'] = time.strftime("%Y-%m-%d %H:%M:%S",time_local)
 
                     d['topic_id'] = topic.id
                     d['topic_name'] = topic.name
@@ -240,7 +259,10 @@ class ZhihuSpider:
                     d = {'_id': name + str(act.created_time)}
                     d['user'] = name
                     d['type'] = 'VOTEUP_ANSWER'
-                    d['created_time'] = act.created_time
+                    timestamp = act.created_time
+                    time_local = time.localtime(timestamp)
+                    d['created_time'] = time.strftime("%Y-%m-%d %H:%M:%S",time_local)
+
 
                     d['question_id'] = question.id
                     d['question_title'] = question.title
@@ -264,7 +286,9 @@ class ZhihuSpider:
                     d = {'_id': name + str(act.created_time)}
                     d['user'] = name
                     d['type'] = 'VOTEUP_ARTICLE'
-                    d['created_time'] = act.created_time
+                    timestamp = act.created_time
+                    time_local = time.localtime(timestamp)
+                    d['created_time'] = time.strftime("%Y-%m-%d %H:%M:%S",time_local)
 
                     d['article_id'] = article.id
                     d['article_title'] = article.title
@@ -322,7 +346,7 @@ class ZhihuSpider:
 
 if __name__ == "__main__":
     s = ZhihuSpider()
-    s.findPerson('xie-yun-chen-74')
+    s.updateAll()
     #s.addPerson('qian-ni-ma-82')
 
     # s.updateAll()

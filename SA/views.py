@@ -127,7 +127,7 @@ def person_detail(request,follow_id):
     tieba_flag = False
 
     #微博
-    if not friend.weibo_url == '':
+    if not friend.weibo_url == '' and not friend.weibo_url == ' ' :
         weibo_flag = True
         document = get_weibo_profile(friend.weibo_id)
         context['weibo_name'] = document['NickName']
@@ -143,7 +143,7 @@ def person_detail(request,follow_id):
         context['friend'] = friend
 
     #知乎
-    if not friend.zhihu_url == '':
+    if not friend.zhihu_url == '' and not friend.zhihu_url == ' ':
         zhihu_flag = True
         document2 = get_zhihu_profile(friend.zhihu_id)
         print(document2)
@@ -153,7 +153,7 @@ def person_detail(request,follow_id):
         context['articles_count'] = document2['articles_count']
 
     #贴吧
-    if not friend.tieba_username == '':
+    if not friend.tieba_username == '' and not friend.tieba_username == ' ':
         tieba_flag = True
         document3 = get_tieba_profile(friend.tieba_username)
         context['tieba_name'] = document3['Name']
@@ -325,9 +325,11 @@ def state_detail(request,follow_id):
     #知乎动态
     zhihu_states = get_zhihu_state(friend.zhihu_id)
     for s in zhihu_states:
+        '''
         timestamp = s['created_time']
         time_local = time.localtime(timestamp)
         s['created_time'] = time.strftime("%Y-%m-%d %H:%M:%S",time_local)
+        '''
         if s['type'] == 'VOTEUP_ANSWER':
             s['answer_content'] = mark_safe(s['answer_content'])
         elif s['type'] == 'CREATE_ANSWER':

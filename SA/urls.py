@@ -17,7 +17,8 @@ state_pattern = [
 ]
 
 analysis_pattern = [
-
+    url(r'^statistics_index/$',statistics_index,name='statistics_index'),
+    url(r'^statistics/(?P<follow_id>[0-9]+)/$',statistics_detail,name='statistics_detail'),
 ]
 
 urlpatterns = [

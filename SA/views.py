@@ -12,6 +12,7 @@ from django.shortcuts import render, render_to_response, \
     HttpResponse, HttpResponseRedirect
 from .spider import *
 from django.utils.safestring import mark_safe
+from .analysis import *
 
 
 @csrf_exempt
@@ -354,6 +355,38 @@ def update_weibo1(request,follow_id):
 
     return HttpResponse(json.dumps(result), content_type='application/json')
 
+@csrf_exempt
+@login_required
+def statistics_index(request):
+    user = request.user
+    userinfo = user.userinfo
+
+    follows = userinfo.follow_set.all()
+    context = {}
+    context['follows'] = follows
+
+    return render(request,'SA/statistics_index.html',context)
+
+@csrf_exempt
+@login_required
+def statistics_detail(request,follow_id):
+    follow = Follow.objects.get(id=follow_id)
+    weibo_num,zhihu_num,tieba_num,has_weibo,has_zhihu,has_tieba = statistics(follow.weibo_id,follow.zhihu_id,follow.tieba_username)
+    context = {}
+    context['weibo_num'] = weibo_num
+    context['zhihu_num'] = zhihu_num
+    context['tieba_num'] = tieba_num
+    context['has_weibo'] = has_weibo
+    context['has_zhihu'] = has_zhihu
+    context['has_tieba'] = has_tieba
+
+    user = request.user
+    userinfo = user.userinfo
+
+    follows = userinfo.follow_set.all()
+    context['follows'] = follows
+
+    return render(request,'SA/statistics_detail.html',context)
 
 
 

@@ -21,7 +21,7 @@
 
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
-						<li class="active">
+						<li>
 							 <a href="{% url 'SA:home' %}">首页</a>
 						</li>
 						<li>
@@ -30,7 +30,8 @@
                         <li>
 							 <a href="{% url 'SA:state' %}">动态</a>
 						</li>
-						<li class="dropdown">
+
+						<li class="dropdown active">
 							 <a href="#" class="dropdown-toggle" data-toggle="dropdown">分析<strong class="caret"></strong></a>
 							<ul class="dropdown-menu">
 								<li>
@@ -67,41 +68,19 @@
 			</nav>
 		</div>
 	</div>
-	<div class="row clearfix">
-		<div class="col-md-4 column">
-			<h2>
-                <span class="glyphicon glyphicon-user" style="color: rgb(0, 158, 255);">个人</span>
-            </h2>
-			<p>
-				在这里，完善您的个人信息，添加您感兴趣的好友，以便我们为您即时发现他（她）的动态
-			</p>
-			<p>
-				 <a class="btn" href="{% url 'SA:person_info' %}">详情 »</a>
-			</p>
-		</div>
-		<div class="col-md-4 column">
-			<h2>
-                <span class="glyphicon glyphicon-th-large" style="color: rgb(0, 158, 255);">动态</span>
-			</h2>
-			<p>
-				 在这里，我们第一时间为您汇总了您所感兴趣的好友在各个社交平台上的最新动态，方便您的查阅
-			</p>
-			<p>
-				 <a class="btn" href="{% url 'SA:state' %}">详情 »</a>
-			</p>
-		</div>
-		<div class="col-md-4 column">
-			<h2>
-                <span class="glyphicon glyphicon-eye-open" style="color: rgb(0, 158, 255);">分析</span>
-			</h2>
-			<p>
-				 在这里，我们为您分析了您所感兴趣的好友，您可以查看到他（她）最近的活跃度、兴趣以及与之密切相关的用户
-			</p>
-			<p>
-				 <a class="btn" href="#">详情 »</a>
-			</p>
-		</div>
-	</div>
+        <div class="row clearfix">
+        <div class="col-md-3 column">
+            <div class="list-group">
+                {% block list %}
+                {% endblock %}
+            </div>
+        </div>
+        <div class="col-md-9 column">
+            {% block content %}
+
+            {% endblock %}
+        </div>
+         </div>
     </div>
 
 </body>

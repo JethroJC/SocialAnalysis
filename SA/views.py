@@ -350,7 +350,7 @@ def state_detail(request,follow_id):
 def update_weibo1(request,follow_id):
     follow = Follow.objects.get(id=follow_id)
     num = update_weibo(follow.weibo_id)
-    print(num)
+
     result = {'status':'success'}
 
     return HttpResponse(json.dumps(result), content_type='application/json')
@@ -388,8 +388,49 @@ def statistics_detail(request,follow_id):
 
     return render(request,'SA/statistics_detail.html',context)
 
+@csrf_exempt
+@login_required
+def interest_index(request):
+    user = request.user
+    userinfo = user.userinfo
 
+    follows = userinfo.follow_set.all()
+    context = {}
+    context['follows'] = follows
 
+    return render(request,'SA/interest_index.html',context)
+
+@csrf_exempt
+@login_required
+def interest_detail(request,follow_id):
+    follow = Follow.objects.get(id=follow_id)
+    keys = ['weibo_interest','zhihu_interest','has_weibo','has_zhihu']
+    values = interest(follow.weibo_id,follow.zhihu_id,follow.tieba_username)
+    context = dict(zip(keys,values))
+
+    user = request.user
+    userinfo = user.userinfo
+
+    follows = userinfo.follow_set.all()
+    context['follows'] = follows
+    return render(request,'SA/interest_detail.html',context)
+
+@csrf_exempt
+@login_required
+def emotion_index(request):
+    user = request.user
+    userinfo = user.userinfo
+
+    follows = userinfo.follow_set.all()
+    context = {}
+    context['follows'] = follows
+
+    return render(request,'SA/emotion_index.html',context)
+
+@csrf_exempt
+@login_required
+def emotion_detail(request):
+    pass
 
 
 

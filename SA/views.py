@@ -429,8 +429,11 @@ def emotion_index(request):
 
 @csrf_exempt
 @login_required
-def emotion_detail(request):
-    pass
+def emotion_detail(request,follow_id):
+    follow = Follow.objects.get(id=follow_id)
+    emotion(follow.weibo_id)
+
+    return render(request,'SA/emotion_index.html',context)
 
 
 

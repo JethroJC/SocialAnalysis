@@ -4,7 +4,7 @@
     <a href="{% url 'SA:person_info' %}" class="list-group-item active"><h4>关注列表</h4></a>
     {% for f in follows %}
     <div class="list-group-item">
-        <a href='{% url 'SA:interest_detail' f.id %}'><h4>{{ f.tag_name }}</h4></a>
+        <a href='{% url 'SA:emotion_detail' f.id %}'><h4>{{ f.tag_name }}</h4></a>
     </div>
     {% endfor %}
 

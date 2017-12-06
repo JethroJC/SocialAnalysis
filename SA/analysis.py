@@ -10,63 +10,21 @@ import pickle as pkl
 
 nlp = BosonNLP('wsyCNqRz.21248.UXNUZt2FXUBg')
 
-def emotion(weibo_id,zhihu_id,tieba_id):
-    conn = pymongo.MongoClient("localhost", 27017)
-    db = conn["Sina"]
-    Tweets = db['Tweets']
-    weibo_item = Tweets.find({'ID': weibo_id})
-
+def emotion(weibo_id):
+    weibo_tweets = get_weibo_state(weibo_id)
     now_time = datetime.datetime.now()
     base_time = str(now_time + datetime.timedelta(days=-30))
+    has_weibo = False
+    weibo_emotion = []
+    if weibo_tweets != []:
+        has_weibo = True
+        for w in weibo_tweets:
+            if w['PubTime'] >= base_time:
+                pass
 
-    if weibo_item:
-        weibo_item = [dict(x) for x in weibo_item]
-    else:
-        weibo_item = []
 
-    weibo_item2 = []
-    for x in weibo_item:
-        if 'PubTime' in x.keys():
-            if x['PubTime'] > base_time:
-                weibo_item2.append(x)
 
-    weibo_item2 = sorted(weibo_item2,key=lambda x:x['PubTime'],reverse=True)
 
-    db = conn["Zhihu"]
-    Tweets = db['Tweets']
-    zhihu_item = Tweets.find({'user': zhihu_id})
-
-    if zhihu_item:
-        zhihu_item = [dict(x) for x in zhihu_item]
-    else:
-        zhihu_item = []
-
-    zhihu_item2 = []
-    for x in zhihu_item:
-        if 'created_time' in x.keys():
-            if x['created_time'] > base_time:
-                zhihu_item2.append(x)
-
-    zhihu_item2 = sorted(zhihu_item2,key=lambda x:x['created_time'],reverse=True)
-
-    db = conn["Tieba"]
-    Tweets = db['Tweets']
-    tieba_item = Tweets.find({'User': tieba_id})
-
-    if tieba_item:
-        tieba_item = [dict(x) for x in tieba_item]
-    else:
-        tieba_item = []
-
-    tieba_item2 = []
-    for x in tieba_item:
-        if 'Date' in x.keys():
-            if x['Date'] > base_time:
-                tieba_item2.append(x)
-
-    tieba_item2 = sorted(tieba_item2,key=lambda x:x['Date'],reverse=True)
-
-    return weibo_item2,zhihu_item2,tieba_item2
 
 def interest(weibo_id,zhihu_id,tieba_id):
     weibo_tweets = get_weibo_state(weibo_id)

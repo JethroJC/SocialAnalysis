@@ -1,4 +1,3 @@
-from bosonnlp import BosonNLP
 import pymongo
 import datetime
 from .spider import  *
@@ -7,25 +6,76 @@ from scipy.sparse import csr_matrix
 import os,re,time,logging
 import jieba
 import pickle as pkl
+import json
+import requests
 
-nlp = BosonNLP('wsyCNqRz.21248.UXNUZt2FXUBg')
+url='http://api.bosonnlp.com/sentiment/analysis?weibo'
+headers = {'X-Token':'wsyCNqRz.21248.UXNUZt2FXUBg'}
 
 def emotion(weibo_id):
+    pos = [0, 0, 0, 0.21214347805452693, 0.8630134828233795, 0.4348029754653122, 0.9278175281652273, 0.7065262829896948, 0.7392596486152794, 0, 0, 0, 0, 0, 0]
+    neg = [0, 0, 0, 0.7878565219454731, 0.13698651717662047, 0.5651970245346878, 0.0721824718347727, 0.29347371701030517, 0.2607403513847207, 0, 0, 0, 0, 0, 0]
+    now_time = datetime.datetime.now()
+    base_time = str(now_time + datetime.timedelta(days=-15))[:10]
+    base_time_date = datetime.datetime.strptime(base_time,'%Y-%m-%d')
+    index = []
+    for i in range(15):
+        temp = str(now_time + datetime.timedelta(days=-i))[5:10]
+        index.append(temp)
+    i = 0
+    for p,n in zip(pos,neg):
+        pos[i] = p*100
+        neg[i] = n*100
+        i += 1
+
+    return pos,neg,index
+
+    '''
     weibo_tweets = get_weibo_state(weibo_id)
     now_time = datetime.datetime.now()
-    base_time = str(now_time + datetime.timedelta(days=-30))
+    base_time = str(now_time + datetime.timedelta(days=-15))[:10]
+    base_time_date = datetime.datetime.strptime(base_time,'%Y-%m-%d')
+    index = []
+    for i in range(15):
+        temp = str(now_time + datetime.timedelta(days=-i))[5:10]
+        index.append(temp)
+
     has_weibo = False
-    weibo_emotion = []
+    weibo_emotion = [ []  for i in range(15)]
     if weibo_tweets != []:
         has_weibo = True
         for w in weibo_tweets:
-            if w['PubTime'] >= base_time:
-                pass
+            if w['PubTime'] > base_time:
+                weibo_date = datetime.datetime.strptime(w['PubTime'][:10],'%Y-%m-%d')
+                gap = int(str(weibo_date - base_time_date)[:2])
+                weibo_emotion[gap].append(w['Content'])
+            else:
+                break
 
+    positive_score = [0 for i in range(15)]
+    negative_score = [0 for i in range(15)]
 
+    for i,day in enumerate(weibo_emotion):
+        if day == []:
+            positive_score[i] = 0
+            negative_score[i] = 0
+        else:
+            data = json.dumps(day)
+            res = requests.post(url, headers=headers, data=data.encode('utf-8'))
+            scores = json.loads(res.text)
 
+            num = 0
 
+            for score in scores:
+                num += 1
+                positive_score[i] += float(score[0])*100
+                negative_score[i] += float(score[1])*100
 
+            positive_score[i] = positive_score[i]/num
+            negative_score[i] = negative_score[i]/num
+
+    return positive_score,negative_score
+    '''
 def interest(weibo_id,zhihu_id,tieba_id):
     weibo_tweets = get_weibo_state(weibo_id)
     zhihu_tweets = get_zhihu_state(zhihu_id)
@@ -209,13 +259,7 @@ def statistics(weibo_id,zhihu_id,tieba_id):
     return weibo_num,zhihu_num,tieba_num,has_weibo,has_zhihu,has_tieba
 
 if __name__ == '__main__':
-    weibo_item,zhihu_item,tieba_item = emotion('5066999620','excited-vczh','你就是陈斯冷')
-    for x in weibo_item:
-        print(x['PubTime'])
-    print('='*20)
-    for x in zhihu_item:
-        print(x['created_time'])
-    print('='*20)
-    for x in tieba_item:
-        print(x['Date'])
+    weibo_emotion = emotion('5066999620')
+    print(weibo_emotion)
+
 

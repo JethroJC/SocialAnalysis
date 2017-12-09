@@ -332,6 +332,7 @@ def state_detail(request,follow_id):
         s['created_time'] = time.strftime("%Y-%m-%d %H:%M:%S",time_local)
         '''
         if s['type'] == 'VOTEUP_ANSWER':
+
             s['answer_content'] = mark_safe(s['answer_content'])
         elif s['type'] == 'CREATE_ANSWER':
             s['answer_content'] = mark_safe(s['answer_content'])
@@ -431,9 +432,19 @@ def emotion_index(request):
 @login_required
 def emotion_detail(request,follow_id):
     follow = Follow.objects.get(id=follow_id)
-    emotion(follow.weibo_id)
+    context = {}
+    pos,neg,index = emotion('5066999620')
 
-    return render(request,'SA/emotion_index.html',context)
+    context['pos'] = pos
+    context['neg'] = neg
+    context['index'] = index
+    user = request.user
+    userinfo = user.userinfo
+
+    follows = userinfo.follow_set.all()
+    context['follows'] = follows
+
+    return render(request,'SA/emotion_detail.html',context)
 
 
 

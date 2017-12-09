@@ -4,7 +4,7 @@
     <a href="{% url 'SA:person_info' %}" class="list-group-item active"><h4>关注列表</h4></a>
     {% for f in follows %}
     <div class="list-group-item">
-        <a href='{% url 'SA:interest_detail' f.id %}'><h4>{{ f.tag_name }}</h4></a>
+        <a href='{% url 'SA:emotion_detail' f.id %}'><h4>{{ f.tag_name }}</h4></a>
     </div>
     {% endfor %}
 
@@ -14,4 +14,55 @@
     <h1 class="text-center">
            情感分析
     </h1>
+
+    <canvas id="myChart" width="800" height="400"></canvas>
+
+    <script>
+            var data = {
+                        labels : {{ index }},
+                        datasets : [
+                            {
+                                fillColor : "rgba(220,220,220,0.5)",
+                                strokeColor : "rgba(220,220,220,1)",
+                                data : {{ pos }}
+                            },
+                            {
+                                fillColor : "rgba(151,187,205,0.5)",
+                                strokeColor : "rgba(151,187,205,1)",
+                                data : {{ neg }}
+                            }
+                        ]
+                        };
+            window.onload = function(){
+                var ctx = $("#myChart").get(0).getContext("2d");
+                window.myLine = new Chart(ctx).Bar(data);
+            }
+    </script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var ctx = $("#myChart").get(0).getContext("2d");
+            var myNewChart = new Chart(ctx);
+            var data = {
+                        labels : {{ index }},
+                        datasets : [
+                            {
+                                fillColor : "rgba(220,220,220,0.5)",
+                                strokeColor : "rgba(220,220,220,1)",
+                                data : {{ pos }}
+                            },
+                            {
+                                fillColor : "rgba(151,187,205,0.5)",
+                                strokeColor : "rgba(151,187,205,1)",
+                                data : {{ neg }}
+                            }
+                        ]
+                        };
+
+            myNewChart.Bar(data);
+        });
+
+    </script>
+
 {% endblock %}

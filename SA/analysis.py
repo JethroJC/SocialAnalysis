@@ -1,11 +1,6 @@
 import pymongo
 import datetime
 from .spider import  *
-from gensim import corpora, models
-from scipy.sparse import csr_matrix
-import os,re,time,logging
-import jieba
-import pickle as pkl
 import json
 import requests
 
@@ -13,24 +8,6 @@ url='http://api.bosonnlp.com/sentiment/analysis?weibo'
 headers = {'X-Token':'wsyCNqRz.21248.UXNUZt2FXUBg'}
 
 def emotion(weibo_id):
-    pos = [0, 0, 0, 0.21214347805452693, 0.8630134828233795, 0.4348029754653122, 0.9278175281652273, 0.7065262829896948, 0.7392596486152794, 0, 0, 0, 0, 0, 0]
-    neg = [0, 0, 0, 0.7878565219454731, 0.13698651717662047, 0.5651970245346878, 0.0721824718347727, 0.29347371701030517, 0.2607403513847207, 0, 0, 0, 0, 0, 0]
-    now_time = datetime.datetime.now()
-    base_time = str(now_time + datetime.timedelta(days=-15))[:10]
-    base_time_date = datetime.datetime.strptime(base_time,'%Y-%m-%d')
-    index = []
-    for i in range(15):
-        temp = str(now_time + datetime.timedelta(days=-i))[5:10]
-        index.append(temp)
-    i = 0
-    for p,n in zip(pos,neg):
-        pos[i] = p*100
-        neg[i] = n*100
-        i += 1
-
-    return pos,neg,index
-
-    '''
     weibo_tweets = get_weibo_state(weibo_id)
     now_time = datetime.datetime.now()
     base_time = str(now_time + datetime.timedelta(days=-15))[:10]
@@ -74,106 +51,34 @@ def emotion(weibo_id):
             positive_score[i] = positive_score[i]/num
             negative_score[i] = negative_score[i]/num
 
-    return positive_score,negative_score
-    '''
-def interest(weibo_id,zhihu_id,tieba_id):
-    weibo_tweets = get_weibo_state(weibo_id)
-    zhihu_tweets = get_zhihu_state(zhihu_id)
+    return positive_score,negative_score,index
+
+def interest(weibo_id,zhihu_id):
     has_weibo = False
     has_zhihu = False
-    weibo_interest = {'体育':0, '娱乐':0, '家居':0, '彩票':0, '房产':0, '教育':0, '时尚':0, '时政':0, '星座':0, '游戏':0, '社会':0, '科技':0, '股票':0, '财经':0}
-    zhihu_interest = {'体育':0, '娱乐':0, '家居':0, '彩票':0, '房产':0, '教育':0, '时尚':0, '时政':0, '星座':0, '游戏':0, '社会':0, '科技':0, '股票':0, '财经':0}
-    if weibo_tweets != []:
+
+    conn = pymongo.MongoClient("localhost", 27017)
+    db = conn["Sina"]
+    weibo_interest = db['Interest'].find_one({'id':weibo_id})
+    db = conn['Zhihu']
+    zhihu_interest = db['Interest'].find_one({'id':zhihu_id})
+
+    if weibo_interest:
+        weibo_interest = dict(weibo_interest)
+        weibo_interest = weibo_interest['weibo_interest']
         has_weibo = True
-        for w in weibo_tweets:
-            cat = classify(w['Content'])
-            weibo_interest[cat] += 1
+    else:
+        weibo_interest = []
 
-    if zhihu_tweets != []:
+    if zhihu_interest:
+        zhihu_interest = dict(zhihu_interest)
+        zhihu_interest = zhihu_interest['zhihu_interest']
         has_zhihu = True
-        for w in zhihu_tweets:
-            if w['type'] == 'CREATE_ANSWER':
-                cat = classify(w['answer_content'])
-                zhihu_interest[cat] += 1
+    else:
+        zhihu_interest = []
 
-    weibo_interest = sorted(weibo_interest.items(),key=lambda item:item[1],reverse=True)
-    zhihu_interest = sorted(zhihu_interest.items(),key=lambda item:item[1],reverse=True)
-
-    weibo_total = 0.0
-    for i,w in enumerate(weibo_interest):
-        if w[1] == 0:
-            weibo_interest = weibo_interest[:i]
-            break
-        else:
-            weibo_total += w[1]
-
-    zhihu_total = 0.0
-    for i,z in enumerate(zhihu_interest):
-        if z[1] == 0:
-            zhihu_interest = zhihu_interest[:i]
-            break
-        else:
-            zhihu_total += z[1]
-
-    weibo_interest = [(x[0],x[1]/weibo_total*100) for x in weibo_interest]
-    zhihu_interest = [(x[0],x[1]/zhihu_total*100) for x in zhihu_interest]
-
-    print(weibo_interest)
-    print(zhihu_interest)
     return weibo_interest,zhihu_interest,has_weibo,has_zhihu
 
-def classify(demo_doc):
-    path_doc_root = '/Users/jethro/算法设计/TextClassify/THUCNews'
-    path_tmp = '/Users/jethro/算法设计/TextClassify/temp'
-    path_dictionary     = os.path.join(path_tmp, 'THUNews.dict')
-    path_tmp_lsi        = os.path.join(path_tmp, 'lsi_corpus')
-    path_tmp_lsimodel   = os.path.join(path_tmp, 'lsi_model.pkl')
-    path_tmp_predictor  = os.path.join(path_tmp, 'predictor.pkl')
-
-    dictionary = None
-    corpus_tfidf = None
-    corpus_lsi = None
-    lsi_model = None
-    predictor = None
-
-    dictionary = corpora.Dictionary.load(path_dictionary)
-
-    lsi_file = open(path_tmp_lsimodel,'rb')
-    lsi_model = pkl.load(lsi_file)
-    lsi_file.close()
-
-    x = open(path_tmp_predictor,'rb')
-    predictor = pkl.load(x)
-    x.close()
-
-    files = os.listdir(path_tmp_lsi)
-    catg_list = []
-
-    for file in files:
-        temp = file.split('.')[0]
-        if temp not in catg_list:
-            catg_list.append(temp)
-
-    demo_doc = list(jieba.cut(demo_doc,cut_all=False))
-    demo_bow = dictionary.doc2bow(demo_doc)
-    tfidf_model = models.TfidfModel(dictionary=dictionary)
-    demo_tfidf = tfidf_model[demo_bow]
-    demo_lsi = lsi_model[demo_tfidf]
-
-    data = []
-    rows = []
-    cols = []
-
-    for item in demo_lsi:
-        rows.append(0)
-        cols.append(item[0])
-        data.append(item[1])
-
-    demo_matrix = csr_matrix((data,(rows,cols))).toarray()
-    x = predictor.predict(demo_matrix)
-
-    catg = catg_list[x[0]]
-    return  catg
 
 def statistics(weibo_id,zhihu_id,tieba_id):
     recent_3 = datetime.datetime.now()

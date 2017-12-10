@@ -380,7 +380,7 @@ def statistics_detail(request,follow_id):
     context['has_weibo'] = has_weibo
     context['has_zhihu'] = has_zhihu
     context['has_tieba'] = has_tieba
-
+    print(update_weibo('5066999620'))
     user = request.user
     userinfo = user.userinfo
 
@@ -406,7 +406,7 @@ def interest_index(request):
 def interest_detail(request,follow_id):
     follow = Follow.objects.get(id=follow_id)
     keys = ['weibo_interest','zhihu_interest','has_weibo','has_zhihu']
-    values = interest(follow.weibo_id,follow.zhihu_id,follow.tieba_username)
+    values = interest(follow.weibo_id,follow.zhihu_id)
     context = dict(zip(keys,values))
 
     user = request.user
@@ -433,23 +433,25 @@ def emotion_index(request):
 def emotion_detail(request,follow_id):
     follow = Follow.objects.get(id=follow_id)
     context = {}
-    pos,neg,index = emotion('5066999620')
-
-    context['pos'] = pos
-    context['neg'] = neg
-    context['index'] = index
     user = request.user
     userinfo = user.userinfo
 
     follows = userinfo.follow_set.all()
     context['follows'] = follows
+    context['follow_id'] = follow_id
 
     return render(request,'SA/emotion_detail.html',context)
 
 
-
-
-
+@csrf_exempt
+@login_required
+def get_emotion(request,follow_id):
+    pos,neg,index = emotion('5066999620')
+    result = {}
+    result['pos'] = pos
+    result['neg'] = neg
+    result['index'] = index
+    return HttpResponse(json.dumps(result), content_type='application/json')
 
 
 

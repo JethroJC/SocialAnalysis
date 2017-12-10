@@ -14,53 +14,37 @@
     <h1 class="text-center">
            情感分析
     </h1>
+    <button id="ge" class="btn btn-primary">
+        分析
+    </button>
 
     <canvas id="myChart" width="800" height="400"></canvas>
 
     <script>
-            var data = {
-                        labels : {{ index }},
-                        datasets : [
-                            {
-                                fillColor : "rgba(220,220,220,0.5)",
-                                strokeColor : "rgba(220,220,220,1)",
-                                data : {{ pos }}
-                            },
-                            {
-                                fillColor : "rgba(151,187,205,0.5)",
-                                strokeColor : "rgba(151,187,205,1)",
-                                data : {{ neg }}
-                            }
-                        ]
+    $(document).ready(function(){
+            $('#ge').on('click',function(){
+                $.get("{% url 'SA:get_emotion' follow_id %}",function(data){
+                    var ctx = document.getElementById("myChart").getContext("2d");
+
+                    var data = {
+                    labels : data.index,
+                    datasets : [
+                                {
+                                    fillColor : "rgba(103,204,245,0.5)",
+                                    strokeColor : "rgba(103,204,245,1)",
+                                    data : data.pos
+                                },
+                                {
+                                    fillColor : "rgba(91,91,94,0.5)",
+                                    strokeColor : "rgba(91,91,94,1)",
+                                    data : data.neg
+                                }
+                            ]
                         };
-            window.onload = function(){
-                var ctx = $("#myChart").get(0).getContext("2d");
-                window.myLine = new Chart(ctx).Bar(data);
-            }
-    </script>
+                    var myNewChart = new Chart(ctx).Bar(data);
+                });
 
-
-    <script type="text/javascript">
-        $(document).ready(function(){
-            var ctx = $("#myChart").get(0).getContext("2d");
-            var myNewChart = new Chart(ctx);
-            var data = {
-                        labels : {{ index }},
-                        datasets : [
-                            {
-                                fillColor : "rgba(220,220,220,0.5)",
-                                strokeColor : "rgba(220,220,220,1)",
-                                data : {{ pos }}
-                            },
-                            {
-                                fillColor : "rgba(151,187,205,0.5)",
-                                strokeColor : "rgba(151,187,205,1)",
-                                data : {{ neg }}
-                            }
-                        ]
-                        };
-
-            myNewChart.Bar(data);
+            });
         });
 
     </script>

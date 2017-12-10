@@ -23,6 +23,7 @@ analysis_pattern = [
     url(r'^interest/(?P<follow_id>[0-9]+)/$',interest_detail,name='interest_detail'),
     url(r'^emotion_index/$',emotion_index,name='emotion_index'),
     url(r'^emotion/(?P<follow_id>[0-9]+)/$',emotion_detail,name='emotion_detail'),
+    url(r'^get_emotion/(?P<follow_id>[0-9]+)/$',get_emotion,name='get_emotion'),
 ]
 
 urlpatterns = [

@@ -322,7 +322,8 @@ class ZhihuSpider:
 
 if __name__ == "__main__":
     s = ZhihuSpider()
-    s.findPerson('xie-yun-chen-74')
-    #s.addPerson('qian-ni-ma-82')
+    #s.updateAll()
+
+    s.addPerson('hao-tian-cai')
 
     # s.updateAll()

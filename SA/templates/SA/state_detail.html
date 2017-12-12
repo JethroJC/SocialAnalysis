@@ -22,6 +22,8 @@
 				<div class="tab-content">
 
 					<div class="tab-pane active" id="panel-1">
+                        <span  id="update_weibo" class="glyphicon glyphicon-repeat pull-right" style="color: rgb(2, 132, 216);font-size: 26px;">刷新</span>
+                        <br>
                         <br>
                         <div class="row clearfix">
                         {% for w in weibo %}
@@ -48,6 +50,8 @@
                     </div>
 
                     <div class="tab-pane" id="panel-2">
+                    <span  id="update_zhihu" class="glyphicon glyphicon-repeat pull-right" style="color: rgb(2, 132, 216);font-size: 26px;">刷新</span>
+                    <br>
                     <br>
                         <div class="row clearfix">
                             {% for z in zhihu %}
@@ -123,8 +127,49 @@
                     </div>
 
 					<div class="tab-pane" id="panel-3">
+                        <span  id="update_tieba" class="glyphicon glyphicon-repeat pull-right" style="color: rgb(2, 132, 216);font-size: 26px;">刷新</span>
+                        <br>
+                        <br>
                         <div class="row clearfix">
+                            {% for t in tieba %}
+                                {% if t.Type == 'huifu' %}
+                                    <div class="jumbotron">
+                                        <h4>
+                                            <span class="glyphicon glyphicon-comment" style="color: rgb(0, 138, 195);">
+                                                <a href="https://tieba.baidu.com{{ t.Content_url }}" target="_blank">
+                                                    {{ t.Content }}
+                                                </a>
+                                            </span>
+                                        </h4>
+                                        <h3>
+                                            <a href="https://tieba.baidu.com{{ t.Title_url }}" target="_blank">
+                                            {{ t.Title }}
+                                            </a>
+                                        </h3>
+                                        <h5>
+                                        {{ t.Tieba_name }}
+                                        </h5>
+                                         <span class="glyphicon glyphicon-calendar pull-right" style="color: rgb(0, 163, 255); font-size: 17px;">{{ t.Date }}</span>
+                                    </div>
+                                {% endif %}
 
+                                {% if t.Type == 'zhuti' %}
+                                    <div class="jumbotron">
+                                        <h3>
+                                            <span class="glyphicon glyphicon-pencil" style="color: rgb(0, 138, 195);">
+                                                <a href="https://tieba.baidu.com{{ t.Title_url }}" target="_blank">
+                                                    {{ t.Title }}
+                                                </a>
+                                            </span>
+                                        </h3>
+                                        <h5>
+                                        {{ t.Tieba_name }}
+                                        </h5>
+                                         <span class="glyphicon glyphicon-calendar pull-right" style="color: rgb(0, 163, 255); font-size: 17px;">{{ t.Date }}</span>
+                                    </div>
+                                {% endif %}
+
+                            {% endfor %}
                         </div>
                             <br>
 					</div>
@@ -133,6 +178,42 @@
 			</div>
 		</div>
 	</div>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.glyphicon-repeat').mouseover(function(){
+                $('.glyphicon-repeat').css('color',"rgb(0, 255, 255)");
+            });
+
+            $('.glyphicon-repeat').mouseout(function(){
+                $('.glyphicon-repeat').css('color',"rgb(2, 132, 216)");
+            });
+
+            $('#update_weibo').on('click',function(){
+                $.ajax({
+                    url: "{% url 'SA:update_weibo' follow_id %}",
+                    type: 'post',
+                    async: false,
+                    success: function(ret) {
+                        if(ret.status === "success"){
+                            alert("添加成功");
+                            window.location.href = '{% url 'SA:person_info' %}';
+                            window.event.returnValue = false;
+                            //window.location = 'http://127.0.0.1:8000/SA/home';
+                            //Response.Redirect("http://127.0.0.1:8000/SA/home",true);
+                        }
+                        else
+                        {
+                            $('#login_form').find('input').each(function () {$(this).val("");});
+                            alert("输入信息有误");
+                        }
+                    }
+                });
+            });
+            
+        });
+
+    </script>
 
 
 {% endblock %}

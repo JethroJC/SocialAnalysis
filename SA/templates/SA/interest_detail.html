@@ -1,0 +1,75 @@
+{% extends 'SA/analysis_base.html' %}
+
+{% block list %}
+    <a href="{% url 'SA:person_info' %}" class="list-group-item active"><h4>关注列表</h4></a>
+    {% for f in follows %}
+    <div class="list-group-item">
+        <a href='{% url 'SA:interest_detail' f.id %}'><h4>{{ f.tag_name }}</h4></a>
+    </div>
+    {% endfor %}
+
+{% endblock %}
+
+{% block content %}
+    <h1 class="text-center">
+           兴趣分析
+    </h1>
+
+    <div class="row clearfix">
+		<div class="col-md-6 column">
+            {% if has_weibo %}
+			<h2>
+				微博兴趣
+			</h2>
+            <table class="table table-hover">
+                <tbody>
+                    {% for i in weibo_interest %}
+                        <tr>
+                        <td>
+                        {{ i.0 }}
+                        </td>
+                        <td>
+                        <div style="width: 100%">
+                            <div class="row" style="background-color: whitesmoke">
+                                <div style="float:left; width: {{ i.1 }}%;background-color: #51B5DD">&nbsp;</div>
+                            </div>
+                        </div>
+                        </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+
+            {% endif %}
+		</div>
+		<div class="col-md-6 column">
+            {% if has_zhihu %}
+			<h2>
+				知乎兴趣
+			</h2>
+            <table class="table table-hover">
+                <tbody>
+                    {% for i in zhihu_interest %}
+                        <tr>
+                        <td>
+                        {{ i.0 }}
+                        </td>
+                        <td>
+                        <div style="width: 100%">
+                            <div class="row" style="background-color: whitesmoke">
+                                <div style="float:left; width: {{ i.1 }}%;background-color: #51B5DD">&nbsp;</div>
+                            </div>
+                        </div>
+                        </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+
+            {% endif %}
+		</div>
+	</div>
+
+{% endblock %}

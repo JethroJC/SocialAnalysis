@@ -1,6 +1,5 @@
 import pymongo
 from SA.Spiders.ZhihuSpider2.ZhihuSpider import ZhihuSpider
-from scrapy import Item, Field
 import os
 import datetime
 
@@ -48,15 +47,29 @@ def get_weibo_state(weibo_id):
     Tweets = db['Tweets']
     item = Tweets.find({'ID': weibo_id})
     if item:
-        return  [dict(x) for x in item]
+        item = [dict(x) for x in item]
+
+        weibo_item2 = []
+        for x in item:
+            if 'PubTime' in x.keys():
+                weibo_item2.append(x)
+        weibo_item2 = sorted(weibo_item2,key=lambda x:x['PubTime'],reverse=True)
+        return  weibo_item2
     else:
         return []
 
 def get_zhihu_profile(zhihu_id):
-    s = ZhihuSpider()
-    document = s.findPerson(zhihu_id)
+    conn = pymongo.MongoClient("localhost", 27017)
+    db = conn["Zhihu"]
+    Information = db['Information']
+    item = Information.find_one({'_id': zhihu_id})
+    if item:
+        return dict(item)
+    else:
+        return {}
 
-    return  document
+    #s = ZhihuSpider()
+    #document = s.findPerson(zhihu_id)
 
 def get_zhihu_state(zhihu_id):
     conn = pymongo.MongoClient("localhost", 27017)
@@ -68,12 +81,36 @@ def get_zhihu_state(zhihu_id):
     else:
         return []
 
+def get_tieba_profile(Tieba_id):
+    conn = pymongo.MongoClient("localhost", 27017)
+    db = conn["Tieba"]
+    Information = db['Information']
+    item = Information.find_one({'_id': Tieba_id})
+    if item:
+        return dict(item)
+    else:
+        return {}
+
+    #s = ZhihuSpider()
+    #document = s.findPerson(zhihu_id)
+
+def get_tieba_state(Tieba_id):
+    conn = pymongo.MongoClient("localhost", 27017)
+    db = conn["Tieba"]
+    Tweets = db['Tweets']
+    item = Tweets.find({'User': Tieba_id})
+    if item:
+        return  [dict(x) for x in item]
+    else:
+        return []
+
 def update_weibo(weibo_id):
     '''
 
     :param weibo_id:
     :return: int 表示更新出了几条新动态
     '''
+    print('haha')
     conn = pymongo.MongoClient("localhost", 27017)
     db = conn["Weibo"]
     Tweets = db['Tweets']
@@ -117,7 +154,7 @@ def update_tieba(tieba_id):
 
 if __name__ == "__main__":
     try:
-        os.chdir('../')
-        print(update_zhihu('excited-vczh'))
+        #os.chdir('../')
+        print(update_weibo('5066999620'))
     except Exception as e:
         print(e)

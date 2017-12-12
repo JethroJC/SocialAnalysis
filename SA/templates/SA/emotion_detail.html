@@ -1,0 +1,52 @@
+{% extends 'SA/analysis_base.html' %}
+
+{% block list %}
+    <a href="{% url 'SA:person_info' %}" class="list-group-item active"><h4>关注列表</h4></a>
+    {% for f in follows %}
+    <div class="list-group-item">
+        <a href='{% url 'SA:emotion_detail' f.id %}'><h4>{{ f.tag_name }}</h4></a>
+    </div>
+    {% endfor %}
+
+{% endblock %}
+
+{% block content %}
+    <h1 class="text-center">
+           情感分析
+    </h1>
+    <button id="ge" class="btn btn-primary">
+        分析
+    </button>
+
+    <canvas id="myChart" width="800" height="400"></canvas>
+
+    <script>
+    $(document).ready(function(){
+            $('#ge').on('click',function(){
+                $.get("{% url 'SA:get_emotion' follow_id %}",function(data){
+                    var ctx = document.getElementById("myChart").getContext("2d");
+
+                    var data = {
+                    labels : data.index,
+                    datasets : [
+                                {
+                                    fillColor : "rgba(103,204,245,0.5)",
+                                    strokeColor : "rgba(103,204,245,1)",
+                                    data : data.pos
+                                },
+                                {
+                                    fillColor : "rgba(91,91,94,0.5)",
+                                    strokeColor : "rgba(91,91,94,1)",
+                                    data : data.neg
+                                }
+                            ]
+                        };
+                    var myNewChart = new Chart(ctx).Bar(data);
+                });
+
+            });
+        });
+
+    </script>
+
+{% endblock %}

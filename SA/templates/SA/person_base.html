@@ -35,17 +35,17 @@
 							 <a href="#" class="dropdown-toggle" data-toggle="dropdown">分析<strong class="caret"></strong></a>
 							<ul class="dropdown-menu">
 								<li>
-									 <a href="#">兴趣</a>
+									 <a href="{% url 'SA:interest_index' %}">兴趣</a>
 								</li>
 								<li class="divider">
 								</li>
 								<li>
-									 <a href="#">活跃度</a>
+									 <a href="{% url 'SA:statistics_index' %}">活跃度</a>
 								</li>
                                 <li class="divider">
 								</li>
 								<li>
-									 <a href="#">相关用户</a>
+									 <a href="{% url 'SA:emotion_index' %}">情感分析</a>
 								</li>
 							</ul>
 						</li>

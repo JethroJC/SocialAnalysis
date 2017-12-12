@@ -13,10 +13,17 @@ person_pattern = [
 state_pattern = [
     url(r'^$',state,name='state'),
     url(r'^(?P<follow_id>[0-9]+)/$',state_detail,name='state_detail'),
+    url(r'^update_weibo/(?P<follow_id>[0-9]+)/$',update_weibo1,name='update_weibo'),
 ]
 
 analysis_pattern = [
-
+    url(r'^statistics_index/$',statistics_index,name='statistics_index'),
+    url(r'^statistics/(?P<follow_id>[0-9]+)/$',statistics_detail,name='statistics_detail'),
+    url(r'^interest_index/$',interest_index,name='interest_index'),
+    url(r'^interest/(?P<follow_id>[0-9]+)/$',interest_detail,name='interest_detail'),
+    url(r'^emotion_index/$',emotion_index,name='emotion_index'),
+    url(r'^emotion/(?P<follow_id>[0-9]+)/$',emotion_detail,name='emotion_detail'),
+    url(r'^get_emotion/(?P<follow_id>[0-9]+)/$',get_emotion,name='get_emotion'),
 ]
 
 urlpatterns = [

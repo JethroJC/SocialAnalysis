@@ -35,7 +35,7 @@
 				<div class="tab-content">
 					<div class="tab-pane active" id="panel-1">
                         <div class="row clearfix">
-                            {% if weibo_name != "" %}
+                            {% if weibo_flag %}
                                 <table class="table table-hover">
                                     <tbody>
                                         <tr>
@@ -166,7 +166,7 @@
 
                     <div class="tab-pane" id="panel-2">
                         <div class="row clearfix">
-                            {% if zhihu_name != "" %}
+                            {% if zhihu_flag %}
                                 <table class="table table-hover">
                                     <tbody>
                                         <tr>
@@ -303,12 +303,6 @@
                                 <form class="form-horizontal" role="form" id="add_zhihu_form" method="post">
                                        {% csrf_token %}
                                         <div class="form-group">
-                                             <label for="inputEmail3" class="col-sm-2 control-label">用户名</label>
-                                            <div class="col-sm-10">
-                                                <input  class="form-control" id="username" name="username" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
                                              <label for="inputPassword3" class="col-sm-2 control-label">主页地址</label>
                                             <div class="col-sm-10">
                                                 <input class="form-control" id="homepage_url" name="homepage_url"/>
@@ -328,7 +322,7 @@
 
 					<div class="tab-pane" id="panel-3">
                         <div class="row clearfix">
-                            {% if tieba_name != "" %}
+                            {% if tieba_flag %}
                                 <table class="table table-hover">
                                     <tbody>
                                         <tr>
@@ -357,7 +351,7 @@
                                                 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                                                 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                                                 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-                                                <img onerror="this.src='/media/head/default.jpg'" src="{{ weibo_img_src }}"height="60px" width="60px"  class="img-circle" />
+                                                <img onerror="this.src='/media/head/default.jpg'" src="{{ tieba_img_src }}"height="60px" width="60px"  class="img-circle" />
                                             </td>
                                         </tr>
                                         <tr >
@@ -387,14 +381,14 @@
                                                 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                                                 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
                                                 <font size="5">
-                                                {{ weibo_name }}
+                                                {{ tieba_name }}
                                                 </font>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>
                                                 <h3>
-                                                    地址
+                                                    吧龄
                                                 </h3>
                                             </td>
                                             <td>
@@ -418,13 +412,69 @@
                                                 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                                                 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
                                                 <font size="5">
-                                                {{ weibo_province }} {{ weibo_city }}
+                                                {{ tieba_age }}
                                                 </font>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <h3>
+                                                    发帖数
+                                                </h3>
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+                                                <br>
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                                <font size="5">
+                                                {{ tieba_pages }}
+                                                </font>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <h3>所关注贴吧
+                                                </h3>
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+
                                             </td>
                                         </tr>
 
                                     </tbody>
                                 </table>
+                                {% for f in tieba_follow %}
+                                    <font size="5">
+                                        {{ f }}
+                                    </font>
+                                {% endfor %}
                             {% else %}
                                 <br>
                                 <h2 class="text-center text-info">
@@ -433,23 +483,12 @@
                                 <form class="form-horizontal" role="form" id="add_tieba_form" method="post">
                                        {% csrf_token %}
                                         <div class="form-group">
-                                             <label for="inputEmail3" class="col-sm-2 control-label">账号</label>
+                                             <label for="inputEmail3" class="col-sm-2 control-label">用户名</label>
                                             <div class="col-sm-10">
                                                 <input  class="form-control" id="username" name="username" />
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                             <label for="inputPassword3" class="col-sm-2 control-label">主页地址</label>
-                                            <div class="col-sm-10">
-                                                <input  class="form-control" id="homepage_url" name="homepage_url"/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                             <label for="inputPassword3" class="col-sm-2 control-label">用户id</label>
-                                            <div class="col-sm-10">
-                                                <input  class="form-control" id="weibo_id" name="weibo_id"/>
-                                            </div>
-                                        </div>
+                                        <input type="hidden" id="follow_id" name="follow_id" value="{{ follow_id }}">
                                         <div class="form-group">
                                             <div class="col-sm-offset-2 col-sm-10">
                                                  <button type="submit" class="btn btn-default" id="add_tieba">添加</button>
@@ -460,11 +499,11 @@
                         </div>
                             <br>
 					</div>
+                    <button id="delete" type="button" class="btn btn-primary btn-sm pull-right">删除</button>
 				</div>
 			</div>
 		</div>
 	</div>
-
 
 
     <div id="add_person_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -505,13 +544,6 @@
                     </h4>
 
                     <div class="form-group">
-                        <label for="inputEmail3" class="col-sm-2 control-label">用户名</label>
-                        <div class="col-sm-10">
-                            <input  class="form-control" id="zhihu_username" name="zhihu_username" />
-                        </div>
-                    </div>
-
-                    <div class="form-group">
                         <label for="inputPassword3" class="col-sm-2 control-label">主页地址</label>
                         <div class="col-sm-10">
                             <input class="form-control" id="zhihu_homepage_url" name="zhihu_homepage_url"/>
@@ -522,6 +554,13 @@
                     <h4>
                         贴吧信息
                     </h4>
+
+                    <div class="form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">用户名</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="zhihu_homepage_url" name="tieba_username"/>
+                        </div>
+                    </div>
 
                     <div class="form-group">
                         <div class="col-sm-10">
@@ -591,6 +630,57 @@
                     }
             });
 
+        });
+
+        $('#add_tieba').on('click',function(){
+            let tieba_info = $('#add_tieba_form').serialize();
+            $.ajax({
+                    url: "{% url 'SA:add_tieba' %}",
+                    type: "post",
+                    datatype: "json",
+                    data: tieba_info,
+                    async: false,
+                    success: function(ret) {
+                        if(ret.status === "success"){
+                            alert("添加成功");
+                            window.location.href = '{% url 'SA:person_detail' follow_id  %}';
+                            window.event.returnValue = false;
+                            //window.location = 'http://127.0.0.1:8000/SA/home';
+                            //Response.Redirect("http://127.0.0.1:8000/SA/home",true);
+                        }
+                        else
+                        {
+                            $('#login_form').find('input').each(function () {$(this).val("");});
+                            alert("微博id或主页地址输入错误");
+                        }
+                    }
+            });
+
+        });
+
+        $('#add_person_button').on('click',function(){
+                let person_info = $('#add_person_form').serialize();
+                $.ajax({
+                    url: "{% url 'SA:add_person' %}",
+                    type: 'post',
+                    datatype: 'json',
+                    data: person_info,
+                    async: false,
+                    success: function(ret) {
+                        if(ret.status === "success"){
+                            alert("添加成功");
+                            window.location.href = '{% url 'SA:person_info' %}';
+                            window.event.returnValue = false;
+                            //window.location = 'http://127.0.0.1:8000/SA/home';
+                            //Response.Redirect("http://127.0.0.1:8000/SA/home",true);
+                        }
+                        else
+                        {
+                            $('#login_form').find('input').each(function () {$(this).val("");});
+                            alert("输入信息有误");
+                        }
+                    }
+                });
         });
     });
     </script>

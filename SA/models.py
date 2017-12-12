@@ -22,7 +22,6 @@ class Follow(models.Model):
     weibo_url = models.CharField(max_length=200,default=" ",blank=True)
     weibo_id = models.CharField(max_length=20,default=" ",blank=True)
     tieba_username = models.CharField(max_length=100,default=" ",blank=True)
-    tieba_url = models.CharField(max_length=200,default=" ",blank=True)
     zhihu_url = models.CharField(max_length=200,default=" ",blank=True)
     zhihu_id = models.CharField(max_length=20,default=" ",blank=True)
 

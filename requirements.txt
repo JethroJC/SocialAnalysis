@@ -15,7 +15,7 @@ cryptography==1.8.1
 cssselect==1.0.1
 cycler==0.10.0
 decorator==4.1.2
-Django==1.10.5
+Django==1.11.29
 entrypoints==0.2.3
 gensim==1.0.1
 html5lib==0.9999999
